@@ -2,6 +2,11 @@
   "name": "therion",
   "displayName": "Therion",
   "description": "Therion language support.",
+  "publisher": "rhystyers",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rhyst/vscode-therion-language"
+  },
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.42.0"
