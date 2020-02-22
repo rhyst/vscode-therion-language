@@ -3,6 +3,7 @@
   "displayName": "Therion",
   "description": "Therion language support.",
   "publisher": "rhystyers",
+  "icon": "icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/rhyst/vscode-therion-language"

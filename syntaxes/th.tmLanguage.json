@@ -30,7 +30,7 @@
       "patterns": [
         {
           "name": "support.function.builtin.th",
-          "match": "\\b(encoding|input|team|explo-team|date|units|data|point)\\b"
+          "match": "\\b(equate|join|encoding|input|team|explo-team|date|units|data|point)\\b"
         }
       ]
     },
