@@ -1,3 +1,3 @@
 # VSCode Therion Language
 
-Syntax highlighting for the Therion cave surveying language.
+Simple syntax highlighting and formatting for the Therion cave surveying language.
