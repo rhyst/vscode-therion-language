@@ -2,9 +2,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "JSON to YAML",
+      "label": "Build",
       "command": "npm",
-      "args": ["run", "yaml-to-json"],
+      "args": ["run", "build"],
       "type": "shell"
     }
   ]

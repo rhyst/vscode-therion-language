@@ -1,7 +1,7 @@
 {
   "name": "therion",
   "displayName": "Therion",
-  "description": "Therion syntax highlighting.",
+  "description": "Therion language support.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.42.0"
@@ -9,10 +9,14 @@
   "categories": [
     "Programming Languages"
   ],
+  "main": "./dist/src/extension",
+  "activationEvents": [
+    "onLanguage:therion-lang"
+  ],
   "contributes": {
     "languages": [
       {
-        "id": "th",
+        "id": "therion-lang",
         "aliases": [
           "Therion",
           "th"
@@ -29,16 +33,19 @@
     ],
     "grammars": [
       {
-        "language": "th",
+        "language": "therion-lang",
         "scopeName": "source.therion",
         "path": "./syntaxes/th.tmLanguage.json"
       }
     ]
   },
   "devDependencies": {
-    "js-yaml": "^3.13.1"
+    "js-yaml": "^3.13.1",
+    "typescript": "^3.8.2",
+    "vscode": "^1.1.36"
   },
   "scripts": {
-    "yaml-to-json": "js-yaml syntaxes/th.tmLanguage.yaml > syntaxes/th.tmLanguage.json"
+    "yaml-to-json": "js-yaml syntaxes/th.tmLanguage.yaml > syntaxes/th.tmLanguage.json",
+    "build": "tsc && npm run yaml-to-json"
   }
 }
