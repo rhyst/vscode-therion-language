@@ -1,0 +1,44 @@
+{
+  "name": "therion",
+  "displayName": "Therion",
+  "description": "Therion syntax highlighting.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.42.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "th",
+        "aliases": [
+          "Therion",
+          "th"
+        ],
+        "extensions": [
+          ".th",
+          ".th2",
+          ".thconfig",
+          ".thl",
+          ".thm"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "th",
+        "scopeName": "source.therion",
+        "path": "./syntaxes/th.tmLanguage.json"
+      }
+    ]
+  },
+  "devDependencies": {
+    "js-yaml": "^3.13.1"
+  },
+  "scripts": {
+    "yaml-to-json": "js-yaml syntaxes/th.tmLanguage.yaml > syntaxes/th.tmLanguage.json"
+  }
+}

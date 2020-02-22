@@ -1,0 +1,108 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Therion",
+  "patterns": [
+    {
+      "include": "#expressions"
+    }
+  ],
+  "repository": {
+    "expressions": {
+      "patterns": [
+        {
+          "include": "#builtins"
+        },
+        {
+          "include": "#named-controls"
+        },
+        {
+          "include": "#controls"
+        },
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#strings"
+        }
+      ]
+    },
+    "builtins": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.th",
+          "match": "\\b(encoding|input|team|explo-team|date|units|data|point)\\b"
+        }
+      ]
+    },
+    "named-controls": {
+      "begin": "\\b(survey|scrap|map)\\s+(\\S+)\\b",
+      "end": "\\b(endsurvey|endscrap|endmap)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.th"
+        },
+        "2": {
+          "name": "entity.name.function.th"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.th"
+        }
+      },
+      "name": "expression.group",
+      "patterns": [
+        {
+          "include": "#expressions"
+        },
+        {
+          "match": "asdfsdfjdsjkh",
+          "name": "entity.name.function.th"
+        }
+      ]
+    },
+    "controls": {
+      "begin": "\\b(centreline|centerline|line)(\\s?\\S+)?\\b",
+      "end": "\\b(endcentreline|endcenterline|endline)\\b",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.th"
+        },
+        "2": {
+          "name": "variable.parameter.th"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.th"
+        }
+      },
+      "name": "expression.group",
+      "patterns": [
+        {
+          "include": "#expressions"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.th",
+          "match": "(#.*)$"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.th",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.th",
+          "match": "\\\\."
+        }
+      ]
+    }
+  },
+  "scopeName": "source.therion"
+}
