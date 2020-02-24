@@ -2,7 +2,7 @@
   "name": "therion",
   "displayName": "Therion",
   "description": "Therion language support.",
-  "publisher": "rhystyers",
+  "publisher": "Rhys Tyers",
   "icon": "icon.png",
   "repository": {
     "type": "git",
@@ -17,7 +17,8 @@
   ],
   "main": "./dist/src/extension",
   "activationEvents": [
-    "onLanguage:therion-lang"
+    "onLanguage:therion-lang",
+    "onCommand:therion.createScrapTemplate"
   ],
   "contributes": {
     "languages": [
@@ -45,9 +46,25 @@
         "scopeName": "source.therion",
         "path": "./syntaxes/therion-lang.tmLanguage.json"
       }
-    ]
+    ],
+    "commands": [
+      {
+        "command": "therion.createScrapTemplate",
+        "title": "Therion: Create scrap template"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "therion.createScrapTemplate",
+          "when": "editorLangId == therion-lang"
+        }
+      ]
+    }
   },
   "devDependencies": {
+    "@types/node": "^13.7.4",
+    "@types/tmp": "^0.1.0",
     "js-yaml": "^3.13.1",
     "typescript": "^3.8.2",
     "vscode": "^1.1.36"
@@ -55,5 +72,8 @@
   "scripts": {
     "yaml-to-json": "js-yaml syntaxes/therion-lang.tmLanguage.yaml > syntaxes/therion-lang.tmLanguage.json",
     "build": "tsc && npm run yaml-to-json"
+  },
+  "dependencies": {
+    "tmp": "^0.1.0"
   }
 }
