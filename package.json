@@ -32,7 +32,9 @@
           ".th2",
           ".thconfig",
           ".thl",
-          ".thm"
+          ".thlayout",
+          ".thm",
+          ".thmap"
         ],
         "configuration": "./language-configuration.json"
       }
@@ -41,7 +43,7 @@
       {
         "language": "therion-lang",
         "scopeName": "source.therion",
-        "path": "./syntaxes/th.tmLanguage.json"
+        "path": "./syntaxes/therion-lang.tmLanguage.json"
       }
     ]
   },
@@ -51,7 +53,7 @@
     "vscode": "^1.1.36"
   },
   "scripts": {
-    "yaml-to-json": "js-yaml syntaxes/th.tmLanguage.yaml > syntaxes/th.tmLanguage.json",
+    "yaml-to-json": "js-yaml syntaxes/therion-lang.tmLanguage.yaml > syntaxes/therion-lang.tmLanguage.json",
     "build": "tsc && npm run yaml-to-json"
   }
 }

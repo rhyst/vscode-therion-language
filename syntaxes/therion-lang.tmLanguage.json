@@ -1,0 +1,199 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Therion",
+  "scopeName": "source.therion",
+  "patterns": [
+    {
+      "include": "#expressions"
+    }
+  ],
+  "repository": {
+    "expressions": {
+      "patterns": [
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#builtins"
+        },
+        {
+          "include": "#named-blocks"
+        },
+        {
+          "include": "#blocks"
+        },
+        {
+          "include": "#layouts"
+        }
+      ]
+    },
+    "builtins": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.th",
+          "match": "(?:\\s|^)(text|source|language|export|select|equate|join|encoding|input|team|explo-team|date|units|data|point)(?:\\s|$)"
+        }
+      ]
+    },
+    "named-blocks": {
+      "begin": "(?:\\s|^)(survey|scrap|map|lookup)\\s+(\\S+)(?:\\s|$)",
+      "end": "(?:\\s|^)(endsurvey|endscrap|endmap|endlookup)(?:\\s|$)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.th"
+        },
+        "2": {
+          "name": "entity.name.function.th"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.th"
+        }
+      },
+      "name": "expression.group",
+      "patterns": [
+        {
+          "include": "#expressions"
+        }
+      ]
+    },
+    "blocks": {
+      "begin": "(?:\\s|^)(centreline|centerline|line)(\\s?\\S+)?(?:\\s|$)",
+      "end": "(?:\\s|^)(endcentreline|endcenterline|endline)(?:\\s|$)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.th"
+        },
+        "2": {
+          "name": "variable.parameter.th"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.th"
+        }
+      },
+      "name": "expression.group",
+      "patterns": [
+        {
+          "include": "#expressions"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.th",
+          "match": "(#.*)$"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.th",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.th",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "layout-builtins": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.th",
+          "match": "(?:\\s|^)(scale|colour|symbol-hide|min-symbol-scale|map-comment|symbol-show|fonts-setup|map-header|colour-legend|legend|symbol-assign|initsymbol)(?:\\s|$)"
+        }
+      ]
+    },
+    "layout-code": {
+      "patterns": [
+        {
+          "name": "keyword.control.th",
+          "match": "(?:\\s|^)(code|endcode)(?:\\s|$)"
+        }
+      ]
+    },
+    "layout-groups": {
+      "begin": "(?:\\s|^)(begingroup)(?:\\s|$)",
+      "end": "(?:\\s|^)(endgroup;?)(?:\\s|$)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.th"
+        },
+        "2": {
+          "name": "entity.name.function.th"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.th"
+        }
+      },
+      "name": "expression.group"
+    },
+    "layout-def": {
+      "begin": "(?:\\s|^)(def)\\s+(\\S+)(?:\\s|$)",
+      "end": "(?:\\s|^)(enddef;?)(?:\\s|$)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.th"
+        },
+        "2": {
+          "name": "entity.name.function.th"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.th"
+        }
+      },
+      "name": "expression.group",
+      "patterns": [
+        {
+          "include": "#layout-groups"
+        }
+      ]
+    },
+    "layouts": {
+      "begin": "(?:\\s|^)(layout)\\s+(\\S+)",
+      "end": "(?:\\s|^)(endlayout)(?:\\s|$)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.th"
+        },
+        "2": {
+          "name": "entity.name.function.th"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.th"
+        }
+      },
+      "name": "expression.group",
+      "patterns": [
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#layout-builtins"
+        },
+        {
+          "include": "#layout-def"
+        },
+        {
+          "include": "#layout-code"
+        }
+      ]
+    }
+  }
+}
