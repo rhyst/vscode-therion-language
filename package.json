@@ -18,24 +18,47 @@
   "main": "./dist/src/extension",
   "activationEvents": [
     "onLanguage:therion-lang",
-    "onCommand:therion.createScrapTemplate"
+    "onLanguage:therion-config-lang",
+    "onLanguage:therion-2d-lang",
+    "onCommand:therion.command.createScrapTemplate",
+    "onCommand:therion.command.compile",
+    "onCommand:therion.command.watch",
+    "onCommand:therion.context.openInInkscape"
   ],
   "contributes": {
     "languages": [
       {
         "id": "therion-lang",
         "aliases": [
-          "Therion",
-          "th"
+          "Therion"
         ],
         "extensions": [
           ".th",
-          ".th2",
-          ".thconfig",
           ".thl",
           ".thlayout",
           ".thm",
           ".thmap"
+        ],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "therion-config-lang",
+        "aliases": [
+          "Therion Config"
+        ],
+        "extensions": [
+          ".thcfg",
+          ".thconfig"
+        ],
+        "configuration": "./language-configuration.json"
+      },
+      {
+        "id": "therion-2d-lang",
+        "aliases": [
+          "Therion 2D"
+        ],
+        "extensions": [
+          ".th2"
         ],
         "configuration": "./language-configuration.json"
       }
@@ -45,21 +68,78 @@
         "language": "therion-lang",
         "scopeName": "source.therion",
         "path": "./syntaxes/therion-lang.tmLanguage.json"
+      },
+      {
+        "language": "therion-config-lang",
+        "scopeName": "source.therion",
+        "path": "./syntaxes/therion-lang.tmLanguage.json"
+      },
+      {
+        "language": "therion-2d-lang",
+        "scopeName": "source.therion",
+        "path": "./syntaxes/therion-lang.tmLanguage.json"
       }
     ],
     "commands": [
       {
-        "command": "therion.createScrapTemplate",
+        "command": "therion.command.compile",
+        "title": "Therion: Compile"
+      },
+      {
+        "command": "therion.command.watch",
+        "title": "Therion: Watch"
+      },
+      {
+        "command": "therion.command.createScrapTemplate",
         "title": "Therion: Create scrap template"
+      },
+      {
+        "command": "therion.context.openInInkscape",
+        "title": "Open in Inkscape"
       }
     ],
     "menus": {
       "commandPalette": [
         {
-          "command": "therion.createScrapTemplate",
+          "command": "therion.command.compile",
+          "when": "editorLangId == therion-config-lang"
+        },
+        {
+          "command": "therion.command.watch",
+          "when": "editorLangId == therion-config-lang"
+        },
+        {
+          "command": "therion.command.createScrapTemplate",
           "when": "editorLangId == therion-lang"
         }
+      ],
+      "explorer/context": [
+        {
+          "command": "therion.context.openInInkscape",
+          "when": "resourceLangId == therion-2d-lang",
+          "group": "navigation"
+        }
       ]
+    },
+    "configuration": {
+      "title": "Therion",
+      "properties": {
+        "therion.therionPath": {
+          "type": "string",
+          "default": "therion",
+          "description": "Full path to the Therion executable. Defaults to `therion` assuming its on your path."
+        },
+        "therion.inkscapePath": {
+          "type": "string",
+          "default": "inkscape",
+          "description": "Full path to the Therion executable. Defaults to `inkscape` assuming its on your path."
+        },
+        "therion.format.indentCharacters": {
+          "type": "string",
+          "default": "\t",
+          "description": "The character(s) that should be used for autoformatting indendation."
+        }
+      }
     }
   },
   "devDependencies": {
@@ -74,6 +154,7 @@
     "build": "tsc && npm run yaml-to-json"
   },
   "dependencies": {
+    "chokidar": "^3.3.1",
     "tmp": "^0.1.0"
   }
 }
