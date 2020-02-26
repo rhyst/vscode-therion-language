@@ -93,7 +93,7 @@ endscrap
   const mapTemplate = (name: string) => `
 input ${name}-p.th2
 
-map m${name}-p -projection plan
+map ${getConfig("mapPrefix")}${name}-p -projection plan
     ${name}-1p
 endmap
 
