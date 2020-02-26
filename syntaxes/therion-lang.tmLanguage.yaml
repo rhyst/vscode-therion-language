@@ -64,7 +64,7 @@ repository:
   layout-builtins:
     patterns:
       - name: support.function.builtin.th
-        match: "(?:\\s|^)(scale|colour|symbol-hide|min-symbol-scale|map-comment|symbol-show|fonts-setup|map-header|colour-legend|legend|symbol-assign|initsymbol)(?:\\s|$)"
+        match: "(?:\\s|^)(copy|scale|colour|symbol-hide|min-symbol-scale|map-comment|symbol-show|fonts-setup|map-header|colour-legend|legend|symbol-assign|initsymbol)(?:\\s|$)"
 
   layout-code:
     patterns:
