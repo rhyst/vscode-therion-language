@@ -90,10 +90,13 @@ ${points}
 endscrap
 `;
 
+  const getMapName = (name: string) =>
+    `${getConfig("mapName").replace("{name}", name)}`;
+
   const mapTemplate = (name: string) => `
 input ${name}-p.th2
 
-map ${getConfig("mapPrefix")}${name}-p -projection plan
+map ${getMapName(name)} -projection plan
     ${name}-1p
 endmap
 
