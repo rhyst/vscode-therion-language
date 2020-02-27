@@ -134,10 +134,10 @@
           "default": "inkscape",
           "description": "Full path to the Therion executable. Defaults to `inkscape` assuming its on your path."
         },
-        "therion.mapPrefix": {
+        "therion.mapName": {
           "type": "string",
-          "default": "m-",
-          "description": "The character(s) that should be placed before the map name."
+          "default": "m-{name}-p",
+          "description": "The name of the map created when running  \"Create scrap template\". Substitutions available: {name}."
         },
         "therion.format.indentCharacters": {
           "type": "string",
