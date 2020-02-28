@@ -8,14 +8,14 @@
     "type": "git",
     "url": "https://github.com/rhyst/vscode-therion-language"
   },
-  "version": "0.8.1",
+  "version": "0.8.3",
   "engines": {
     "vscode": "^1.42.0"
   },
   "categories": [
     "Programming Languages"
   ],
-  "main": "./dist/src/extension",
+  "main": "./dist/extension",
   "activationEvents": [
     "onLanguage:therion-lang",
     "onLanguage:therion-config-lang",
@@ -147,22 +147,30 @@
       }
     }
   },
+  "dependencies": {
+    "chokidar": "^3.3.1",
+    "n-readlines": "^1.0.0",
+    "tmp": "^0.1.0",
+    "vscode-languageclient": "^6.1.0",
+    "vscode-languageserver": "^6.1.1",
+    "vscode-languageserver-textdocument": "^1.0.1"
+  },
   "devDependencies": {
     "@types/n-readlines": "^1.0.0",
     "@types/node": "^13.7.6",
     "@types/tmp": "^0.1.0",
     "@types/vscode": "^1.42.0",
-    "chokidar": "^3.3.1",
     "js-yaml": "^3.13.1",
-    "n-readlines": "^1.0.0",
-    "tmp": "^0.1.0",
+    "ts-loader": "^6.2.1",
     "typescript": "^3.8.2",
-    "vscode-languageclient": "^6.1.0",
-    "vscode-languageserver": "^6.1.1",
-    "vscode-languageserver-textdocument": "^1.0.1"
+    "vscode": "^1.1.36",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
   },
   "scripts": {
     "yaml-to-json": "js-yaml syntaxes/therion-lang.tmLanguage.yaml > syntaxes/therion-lang.tmLanguage.json",
-    "build": "tsc && npm run yaml-to-json"
+    "vscode:prepublish": "npm run build",
+    "build": "webpack --mode production && npm run yaml-to-json",
+    "dev": "webpack --mode development && npm run yaml-to-json"
   }
 }
