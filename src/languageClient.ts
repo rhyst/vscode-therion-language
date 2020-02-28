@@ -17,7 +17,7 @@ export const activateLanguageServer = async (
 ) => {
   // The server is implemented in node
   let serverModule = context.asAbsolutePath(
-    path.join("dist", "src", "languageServer.js")
+    path.join("dist", "languageServer.js")
   );
   // The debug options for the server
   // --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
