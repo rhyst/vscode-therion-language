@@ -5,7 +5,8 @@
     "outDir": "dist",
     "lib": ["es2020", "es6", "dom"],
     "sourceMap": true,
-    "rootDir": "."
+    "rootDir": ".",
+    "esModuleInterop": true
   },
   "exclude": ["node_modules"]
 }
