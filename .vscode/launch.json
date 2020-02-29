@@ -11,7 +11,8 @@
       "request": "launch",
       "runtimeExecutable": "${execPath}",
       "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
-      "preLaunchTask": "Build"
+      "preLaunchTask": "Build",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     },
     {
       "type": "node",
@@ -19,7 +20,7 @@
       "name": "Attach to Server",
       "port": 6009,
       "restart": true,
-      "outFiles": ["${workspaceRoot}/dist/*.js"]
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     }
   ]
 }

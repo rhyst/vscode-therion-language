@@ -25,17 +25,17 @@ export function activateCompile(context: vscode.ExtensionContext) {
 
   const watches = new Map();
 
-  const startWatch = (key, name, files) => {
+  const startWatch = async (file, name) => {
+    const files = await getInputs(file);
     const watcher = chokidar.watch(files);
     watcher.on("change", path => {
       outputChannel.appendLine(`Changed: ${path}`);
-      compile(key);
+      watcher.close();
+      startWatch(file, name);
     });
-    watches.set(key, { name, file: key, watcher });
+    watches.set(file, { name, file, watcher });
     updateWatchStatus();
-    vscode.window.showInformationMessage(`Started watching ${name}.`);
-    outputChannel.appendLine(`Started watching ${name}.`);
-    compile(key);
+    compile(file);
   };
 
   const stopWatch = key => {
@@ -72,8 +72,9 @@ export function activateCompile(context: vscode.ExtensionContext) {
         );
         return;
       }
-      const files = await getInputs(file);
-      startWatch(file, name, files);
+      vscode.window.showInformationMessage(`Started watching ${name}.`);
+      outputChannel.appendLine(`Started watching ${name}.`);
+      startWatch(file, name);
     })
   );
 
