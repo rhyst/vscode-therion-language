@@ -78,10 +78,12 @@ connection.onCompletionResolve(
         item.detail = `Therion ${type} name`;
         item.documentation = `${name}${survey && `@${survey}`}`;
         item.insertText = `${name}${survey && `@${survey}`}`;
+        break;
       case "survey":
         item.detail = "Therion survey name";
         item.documentation = survey;
         item.insertText = survey;
+        break;
     }
     return item;
   }
