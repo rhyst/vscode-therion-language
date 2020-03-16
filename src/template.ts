@@ -4,25 +4,34 @@ import * as tmp from "tmp";
 
 import { compile, readFile, writeFile, getConfig, outputChannel } from "./util";
 
-const xviTemplate = (thFile: string, tmpFile: string) => `source ${thFile}
+const xviTemplate = (
+  thFile: string,
+  tmpFile: string,
+  projection: string,
+  name: string,
+  path: string
+) => `source ${thFile}
 layout test
   scale 1 500
-  endlayout
-export map -projection plan -o ${tmpFile} -format xvi -layout test -layout-debug station-names`;
+endlayout
+select ${name}@${path}
+export map -projection ${projection} -o ${tmpFile} -format xvi -layout test -layout-debug station-names`;
 
 const scrapTemplate = (
   name: string,
   points: string,
-  lines: string
+  lines: string,
+  projection: string,
+  projection_short: string
 ) => `encoding  utf-8
 ##XTHERION## xth_me_area_adjust 0 0 1004.000000 1282.000000
 ##XTHERION## xth_me_area_zoom_to 100
 
-scrap DELETE-ME-survey-legs -projection plan -scale [0.0 0.0 500 1000.0 0.0 0.0 150 300]
+scrap DELETE-ME-survey-legs-${projection_short} -projection ${projection} -scale [0.0 0.0 500 1000.0 0.0 0.0 150 300]
 ${lines}
 endscrap
 
-scrap ${name}-1p -projection plan -scale [0.0 0.0 500 1000.0 0.0 0.0 150 300]
+scrap ${name}-1${projection_short} -projection ${projection} -scale [0.0 0.0 500 1000.0 0.0 0.0 150 300]
 ${points}
 endscrap
 `;
@@ -30,11 +39,15 @@ endscrap
 const getMapName = (name: string) =>
   `${getConfig("mapName").replace("{name}", name)}`;
 
-const mapTemplate = (name: string) => `
-input ${name}-p.th2
+const mapTemplate = (
+  name: string,
+  projection: string,
+  projection_short: string
+) => `
+input ${name}-${projection_short}.th2
 
-map ${getMapName(name)} -projection plan
-    ${name}-1p
+map ${getMapName(name)} -projection ${projection}
+    ${name}-1${projection_short}
 endmap
 
 `;
@@ -50,7 +63,7 @@ endline`;
 export function activateTemplater(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "therion.command.createScrapTemplate",
+      "therion.command.createScrapPlanTemplate",
       async () => {
         const editor = vscode.window.activeTextEditor;
         // Split up file path
@@ -60,10 +73,20 @@ export function activateTemplater(context: vscode.ExtensionContext) {
         const thFileExt = path.extname(thFilePath);
         const name = thFileName.replace(thFileExt, "");
 
+        // In future switch between EE and plan
+        const projection_short = "p";
+        const projection = "plan";
+        const surveyName = "";
+        const surveyPath = ""; // Path from file where extends are included
+        // Switch thFile to the file where extends are included
+
         // Export XVI
         const tmpConfig = tmp.fileSync();
         const tmpXVI = tmp.fileSync();
-        await writeFile(tmpConfig.name, xviTemplate(thFilePath, tmpXVI.name));
+        await writeFile(
+          tmpConfig.name,
+          xviTemplate(thFilePath, tmpXVI.name, projection, "", "")
+        );
         await compile(`${tmpConfig.name}`);
 
         // Extract points and lines from XVI
@@ -72,7 +95,7 @@ export function activateTemplater(context: vscode.ExtensionContext) {
         const points = [];
         const lines = [];
         xviLines.forEach(line => {
-          let match = line.match(/{\s*(-?\d+\.\d+)\s*(-?\d+\.\d+)\s*(\d+)\s*}/);
+          let match = line.match(/{\s*(-?\d+\.\d+)\s*(-?\d+\.\d+)\s*(\S+)\s*}/);
           if (match) {
             const x = match[1];
             const y = match[2];
@@ -80,7 +103,7 @@ export function activateTemplater(context: vscode.ExtensionContext) {
             points.push(pointTemplate(x, y, station));
           }
           match = line.match(
-            /{\s*(-?\d+\.\d+)\s*(-?\d+\.\d+)\s*(-?\d+\.\d+)\s*(-?\d+\.\d+)\s*}/
+            /^\s*{\s*(-?\d+\.\d+)\s*(-?\d+\.\d+)\s*(-?\d+\.\d+)\s*(-?\d+\.\d+)\s*.*}/
           );
           if (match) {
             const x1 = match[1];
@@ -93,8 +116,14 @@ export function activateTemplater(context: vscode.ExtensionContext) {
 
         // Write template scrap file
         await writeFile(
-          path.join(thFolderPath, `${name}-p.th2`),
-          scrapTemplate(name, points.join("\n"), lines.join("\n"))
+          path.join(thFolderPath, `${name}-${projection_short}.th2`),
+          scrapTemplate(
+            name,
+            points.join("\n"),
+            lines.join("\n"),
+            projection,
+            projection_short
+          )
         );
 
         // Insert scrap into map in document
@@ -103,7 +132,10 @@ export function activateTemplater(context: vscode.ExtensionContext) {
           if (/^cent(re|er)line/.test(text)) {
             const centrelinePosition = editor.document.lineAt(i).range.start;
             vscode.window.activeTextEditor.edit(editBuilder => {
-              editBuilder.insert(centrelinePosition, mapTemplate(name));
+              editBuilder.insert(
+                centrelinePosition,
+                mapTemplate(name, projection, projection_short)
+              );
             });
             break;
           }

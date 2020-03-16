@@ -90,8 +90,8 @@
         "title": "Therion: Watch"
       },
       {
-        "command": "therion.command.createScrapTemplate",
-        "title": "Therion: Create scrap template"
+        "command": "therion.command.createScrapPlanTemplate",
+        "title": "Therion: Create scrap plan template"
       },
       {
         "command": "therion.context.openInInkscape",
@@ -109,7 +109,7 @@
           "when": "editorLangId == therion-config-lang"
         },
         {
-          "command": "therion.command.createScrapTemplate",
+          "command": "therion.command.createScrapPlanTemplate",
           "when": "editorLangId == therion-lang"
         }
       ],
