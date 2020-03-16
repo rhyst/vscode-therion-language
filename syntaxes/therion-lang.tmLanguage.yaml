@@ -11,12 +11,14 @@ repository:
       - include: "#builtins"
       - include: "#named-blocks"
       - include: "#blocks"
+      - include: "#source-block"
+      - include: "#source-builtin"
       - include: "#layouts"
 
   builtins:
     patterns:
       - name: support.function.builtin.th
-        match: "(?:\\s|^)(text|source|language|export|select|equate|join|encoding|input|team|explo-team|date|units|data|point)(?:\\s|$)"
+        match: "(?:\\s|^)(text|language|export|select|equate|join|encoding|input|team|explo-team|date|units|data|point)(?:\\s|$)"
 
   named-blocks:
     begin: "(?:\\s|^)(survey|scrap|map|lookup)\\s+(\\S+)(?:\\s|$)"
@@ -48,6 +50,27 @@ repository:
     patterns:
       - include: "#expressions"
 
+  # Source can be a block or a builtin
+  source-block:
+    begin: "(?:\\s|^)(source)(?:\\s)*$"
+    end: "(?:\\s|^)(endsource)(?:\\s|$)"
+    beginCaptures:
+      "1":
+        name: "keyword.control.th"
+    endCaptures:
+      "0":
+        name: "keyword.control.th"
+    name: expression.group
+    patterns:
+      - include: "#expressions"
+
+  source-builtin:
+    patterns:
+      - match: "(?:\\s|^)(source)(?:\\s+\\S+)"
+        captures:
+          "1":
+            name: support.function.builtin.th
+
   comments:
     patterns:
       - name: "comment.line.number-sign.th"
@@ -64,7 +87,7 @@ repository:
   layout-builtins:
     patterns:
       - name: support.function.builtin.th
-        match: "(?:\\s|^)(copy|scale|colour|symbol-hide|min-symbol-scale|map-comment|symbol-show|fonts-setup|map-header|colour-legend|legend|symbol-assign|initsymbol)(?:\\s|$)"
+        match: "(?:\\s|^)(copy|scale|colour|symbol-hide|min-symbol-scale|map-comment|symbol-show|fonts-setup|map-header|colour-legend|legend|symbol-assign|initsymbol|statistics|symbol-colour|symbol-color )(?:\\s|$)"
 
   layout-code:
     patterns:
