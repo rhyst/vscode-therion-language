@@ -23,7 +23,8 @@
     "onCommand:therion.command.createScrapTemplate",
     "onCommand:therion.command.compile",
     "onCommand:therion.command.watch",
-    "onCommand:therion.context.openInInkscape"
+    "onCommand:therion.context.openInInkscape",
+    "onCommand:therion.context.open"
   ],
   "contributes": {
     "languages": [
@@ -96,6 +97,10 @@
       {
         "command": "therion.context.openInInkscape",
         "title": "Open in Inkscape"
+      },
+      {
+        "command": "therion.context.open",
+        "title": "Open in Default Application"
       }
     ],
     "menus": {
@@ -114,6 +119,11 @@
         }
       ],
       "explorer/context": [
+        {
+          "command": "therion.context.open",
+          "when": "isLinux || isMac",
+          "group": "navigation"
+        },
         {
           "command": "therion.context.openInInkscape",
           "when": "resourceLangId == therion-2d-lang",
@@ -138,6 +148,11 @@
           "type": "string",
           "default": "m-{name}-p",
           "description": "The name of the map created when running  \"Create scrap template\". Substitutions available: {name}."
+        },
+        "therion.showOpen": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a generic 'Open' option in the context menu."
         },
         "therion.format.indentCharacters": {
           "type": "string",
