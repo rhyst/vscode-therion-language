@@ -26,6 +26,12 @@
           "include": "#blocks"
         },
         {
+          "include": "#source-block"
+        },
+        {
+          "include": "#source-builtin"
+        },
+        {
           "include": "#layouts"
         }
       ]
@@ -34,7 +40,7 @@
       "patterns": [
         {
           "name": "support.function.builtin.th",
-          "match": "(?:\\s|^)(text|source|language|export|select|equate|join|encoding|input|team|explo-team|date|units|data|point)(?:\\s|$)"
+          "match": "(?:\\s|^)(text|language|export|select|equate|join|encoding|input|team|explo-team|date|units|data|point)(?:\\s|$)"
         }
       ]
     },
@@ -81,6 +87,38 @@
       "patterns": [
         {
           "include": "#expressions"
+        }
+      ]
+    },
+    "source-block": {
+      "begin": "(?:\\s|^)(source)(?:\\s)*$",
+      "end": "(?:\\s|^)(endsource)(?:\\s|$)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.th"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.th"
+        }
+      },
+      "name": "expression.group",
+      "patterns": [
+        {
+          "include": "#expressions"
+        }
+      ]
+    },
+    "source-builtin": {
+      "patterns": [
+        {
+          "match": "(?:\\s|^)(source)(?:\\s+\\S+)",
+          "captures": {
+            "1": {
+              "name": "support.function.builtin.th"
+            }
+          }
         }
       ]
     },
