@@ -11,7 +11,7 @@ Tools for the Therion cave surveying programme in VS Code.
 
 ## Commands
 
-- `Therion: Create scrap template`  
+- `Therion: Create scrap plan template`  
   Create a new scrap from the current `.th` file complete with stations and centreline, ready for drawing
 - `Therion: Compile`  
   Compile the current `.thconfig` file
@@ -20,6 +20,8 @@ Tools for the Therion cave surveying programme in VS Code.
 
 ## Menu items
 
+- `Open in Default Application`  
+  Optional extra menu item that attempts to open a file using `xdg-open` on linux and `open` on mac.
 - `Open in Inkscape`  
   Available when opening the context menu on a `.th2` in the file explore. Opens the file in Inkscape.
 
@@ -27,17 +29,18 @@ Tools for the Therion cave surveying programme in VS Code.
 
 **Map and Scrap names**
 
-When typing in a Therion file you will get autocomplete suggestions for map and scrap names that are accessible in that file (i.e. can be found by following the chain of `input` commands). 
+When typing in a Therion file you will get autocomplete suggestions for map and scrap names that are accessible in that file (i.e. can be found by following the chain of `input` commands).
 
 **Survey names**
 
-If you type an `@` character you will get autocomplete suggestions for survey names that are accessible in that file (i.e. can be found by following the chain of `input` commands). 
+If you type an `@` character you will get autocomplete suggestions for survey names that are accessible in that file (i.e. can be found by following the chain of `input` commands).
 
 **Scoping**
 
 The names of maps/scraps/surveys will be properly scoped so you will get the full survey path relative to where you are typing. Example:
 
 `my_passage.th`
+
 ```
 survey my_passage
   input "scraps.th"
@@ -51,6 +54,7 @@ ensurvey
 ```
 
 `my_cave.th`
+
 ```
 survey my_cave
   input "my_passage"
@@ -63,7 +67,9 @@ survey my_cave
 
 endsurvey
 ```
+
 `my_system.th`
+
 ```
 survey my_system
   input "my_cave"
