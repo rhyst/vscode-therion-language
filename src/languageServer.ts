@@ -10,12 +10,15 @@ import {
 import { TextDocument } from "vscode-languageserver-textdocument";
 import {
   getCompletions,
-  getCurrentSurveyPath,
-  getRelativeSurveyPath
+  getCurrentNamespace,
+  getRelativeNamespace,
+  getIncludes
 } from "./serverUtil";
+import { file } from "tmp";
 
 let connection = createConnection(ProposedFeatures.all);
 let documents = new TextDocuments(TextDocument);
+let includes = new Map();
 
 connection.onInitialize((params: InitializeParams) => {
   return {
@@ -39,29 +42,32 @@ connection.onCompletion(
     const lastCharacter = await connection.sendRequest(
       "getActiveTextEditorLastCharacter"
     );
-    const completions = await getCompletions(fileName, lastCharacter);
-    const currentSurveyPath = await getCurrentSurveyPath(
-      fileName,
-      position.line
+    // Get completions from files included in this file
+    // Get completions from files that include this file
+    let completions = await getCompletions(
+      [{ file: fileName, namespace: [] }, ...(includes.get(fileName) || [])],
+      lastCharacter
     );
 
+    const currentNamespace = await getCurrentNamespace(fileName, position.line);
+
     return completions.map(c => {
-      const survey = getRelativeSurveyPath(currentSurveyPath, c.survey)
+      const namespace = getRelativeNamespace(currentNamespace, c.namespace)
         .reverse()
         .join(".");
       let label = "";
       switch (c.type) {
         case "map":
         case "scrap":
-          label = `${c.name}${survey && `@${survey}`}`;
+          label = `${c.name}${namespace && `@${namespace}`}`;
           break;
         case "survey":
-          label = survey;
+          label = namespace;
       }
       return {
         label,
         kind: CompletionItemKind.Variable,
-        data: { ...c, survey }
+        data: { ...c, namespace }
       };
     });
   }
@@ -71,27 +77,38 @@ connection.onCompletion(
 // the completion list.
 connection.onCompletionResolve(
   (item: CompletionItem): CompletionItem => {
-    const { type, name, survey } = item.data;
+    const { type, name, namespace } = item.data;
     switch (type) {
       case "map":
       case "scrap":
         item.detail = `Therion ${type} name`;
-        item.documentation = `${name}${survey && `@${survey}`}`;
-        item.insertText = `${name}${survey && `@${survey}`}`;
+        item.documentation = `${name}${namespace && `@${namespace}`}`;
+        item.insertText = `${name}${namespace && `@${namespace}`}`;
         break;
       case "survey":
         item.detail = "Therion survey name";
-        item.documentation = survey;
-        item.insertText = survey;
+        item.documentation = namespace;
+        item.insertText = namespace;
         break;
     }
     return item;
   }
 );
 
-// Make the text document manager listen on the connection
-// for open, change and close text document events
-documents.listen(connection);
+// Maintain a map of where filenames are used as an input or source
+connection.onInitialized(async () => {
+  const files: { path: string }[] = await connection.sendRequest(
+    "getTherionFiles"
+  );
+  includes = getIncludes(files);
+});
 
-// Listen on the connection
+connection.onDidChangeWatchedFiles(async () => {
+  const files: { path: string }[] = await connection.sendRequest(
+    "getTherionFiles"
+  );
+  includes = getIncludes(files);
+});
+
+documents.listen(connection);
 connection.listen();

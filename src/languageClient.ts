@@ -43,9 +43,9 @@ export const activateLanguageServer = async (
       { scheme: "file", language: "therion-2d-lang" }
     ],
     synchronize: {
-      // Notify the server about file changes to '.clientrc files contained in the workspace
+      // Notify the server about file changes to files contained in the workspace
       fileEvents: vscode.workspace.createFileSystemWatcher(
-        "**/.{th,thm,th2,thc,thcfg.thconfig,thl,thlayout}"
+        "**/.{th,thm,th2,thc,thcfg,thconfig,thl,thlayout}"
       )
     }
   };
@@ -63,9 +63,11 @@ export const activateLanguageServer = async (
 
   await client.onReady();
 
+  // Client/server communication
   client.onRequest("getActiveTextEditorFileName", () => {
     return vscode.window.activeTextEditor.document.fileName;
   });
+
   client.onRequest("getActiveTextEditorLastCharacter", () => {
     const cursor = vscode.window.activeTextEditor.selection.active;
     const start = new vscode.Position(cursor.line, cursor.character - 1);
@@ -73,6 +75,13 @@ export const activateLanguageServer = async (
     return vscode.window.activeTextEditor.document.getText(
       new vscode.Range(start, end)
     );
+  });
+
+  client.onRequest("getTherionFiles", async () => {
+    const files = await vscode.workspace.findFiles(
+      "**/*.{th,thm,th2,thc,thcfg,thconfig,thl,thlayout}"
+    );
+    return files;
   });
 };
 
