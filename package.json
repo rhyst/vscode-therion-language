@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/rhyst/vscode-therion-language"
   },
-  "version": "0.12.0",
+  "version": "0.12.1",
   "engines": {
     "vscode": "^1.42.0"
   },
