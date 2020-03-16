@@ -18,7 +18,7 @@ const endSurveyReg = /(?:\n|^)\s*endsurvey/;
  */
 export const getCompletions = async (files, prevCharacter = null) => {
   let completions = [];
-  let seen = new Set();
+  let seen: Set<string> = new Set();
   for (const file of files) {
     completions = completions.concat(
       await _getCompletions(file.file, file.namespace, seen)
@@ -39,9 +39,10 @@ export const getCompletions = async (files, prevCharacter = null) => {
 export const _getCompletions = async (
   file,
   initialNamespace = [],
-  seen = new Set(),
+  seen: Set<string> = new Set(),
   s = []
 ) => {
+  const inputs: [string, string[], Set<string>, string[]][] = [];
   const namespace = [...s];
   const liner = new LineByLine(file);
   let line: Buffer | false = null;
@@ -57,14 +58,12 @@ export const _getCompletions = async (
       const [, relativePath] = inputMatch;
       const fullPath = join(dirname(file), relativePath.replace(/\"/g, ""));
       const fullPathWithExt = extname(fullPath) ? fullPath : `${fullPath}.th`;
-
-      const moreCompletions = await _getCompletions(
+      inputs.push([
         fullPathWithExt,
-        initialNamespace,
+        [...initialNamespace],
         seen,
-        namespace
-      );
-      completions = completions.concat(...moreCompletions);
+        [...namespace]
+      ]);
       continue;
     }
 
@@ -105,6 +104,10 @@ export const _getCompletions = async (
     if (endSurveyMatch) {
       namespace.pop();
     }
+  }
+  for (const input of inputs) {
+    const moreCompletions = await _getCompletions(...input);
+    completions = completions.concat(...moreCompletions);
   }
   return completions;
 };

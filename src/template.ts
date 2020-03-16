@@ -55,7 +55,7 @@ endmap
 const pointTemplate = (x: string, y: string, station: string) =>
   `point ${x} ${y} station -name ${station}`;
 
-const lineTemplate = (x1, y1, x2, y2) => `line wall 
+const lineTemplate = (x1, y1, x2, y2) => `line survey 
 ${x1} ${y1}
 ${x2} ${y2}
 endline`;
