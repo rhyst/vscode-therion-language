@@ -5,7 +5,7 @@ import {
   LanguageClient,
   LanguageClientOptions,
   ServerOptions,
-  TransportKind
+  TransportKind,
 } from "vscode-languageclient";
 
 import { getConfig } from "./util";
@@ -30,8 +30,8 @@ export const activateLanguageServer = async (
     debug: {
       module: serverModule,
       transport: TransportKind.ipc,
-      options: debugOptions
-    }
+      options: debugOptions,
+    },
   };
 
   // Options to control the language client
@@ -40,14 +40,14 @@ export const activateLanguageServer = async (
     documentSelector: [
       { scheme: "file", language: "therion-lang" },
       { scheme: "file", language: "therion-config-lang" },
-      { scheme: "file", language: "therion-2d-lang" }
+      { scheme: "file", language: "therion-2d-lang" },
     ],
     synchronize: {
       // Notify the server about file changes to files contained in the workspace
       fileEvents: vscode.workspace.createFileSystemWatcher(
         "**/.{th,thm,th2,thc,thcfg,thconfig,thl,thlayout}"
-      )
-    }
+      ),
+    },
   };
 
   // Create the language client and start the client.
@@ -81,7 +81,7 @@ export const activateLanguageServer = async (
     const files = await vscode.workspace.findFiles(
       "**/*.{th,thm,th2,thc,thcfg,thconfig,thl,thlayout}"
     );
-    return files;
+    return files.filter((f) => f.fsPath);
   });
 };
 

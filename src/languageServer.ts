@@ -14,7 +14,6 @@ import {
   getRelativeNamespace,
   getIncludes
 } from "./serverUtil";
-import { file } from "tmp";
 
 let connection = createConnection(ProposedFeatures.all);
 let documents = new TextDocuments(TextDocument);
