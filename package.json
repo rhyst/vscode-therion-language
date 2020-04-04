@@ -24,7 +24,8 @@
     "onCommand:therion.command.compile",
     "onCommand:therion.command.watch",
     "onCommand:therion.context.openInInkscape",
-    "onCommand:therion.context.open"
+    "onCommand:therion.context.open",
+    "onCommand:therion.context.compile"
   ],
   "contributes": {
     "languages": [
@@ -95,6 +96,10 @@
         "title": "Therion: Create scrap plan template"
       },
       {
+        "command": "therion.context.compile",
+        "title": "Compile in Therion"
+      },
+      {
         "command": "therion.context.openInInkscape",
         "title": "Open in Inkscape"
       },
@@ -111,7 +116,7 @@
         },
         {
           "command": "therion.command.watch",
-          "when": "editorLangId == therion-config-lang"
+          "when": "isLinux || isMac && editorLangId == therion-config-lang"
         },
         {
           "command": "therion.command.createScrapPlanTemplate",
@@ -121,12 +126,16 @@
       "explorer/context": [
         {
           "command": "therion.context.open",
-          "when": "isLinux || isMac",
           "group": "navigation"
         },
         {
           "command": "therion.context.openInInkscape",
           "when": "resourceLangId == therion-2d-lang",
+          "group": "navigation"
+        },
+        {
+          "command": "therion.context.compile",
+          "when": "resourceLangId == therion-config-lang",
           "group": "navigation"
         }
       ]
@@ -143,6 +152,11 @@
           "type": "string",
           "default": "inkscape",
           "description": "Full path to the Therion executable. Defaults to `inkscape` assuming its on your path."
+        },
+        "therion.commandTimeout": {
+          "type": "number",
+          "default": 120000,
+          "description": "Timeout for therion commands before failing, in milliseconds."
         },
         "therion.mapName": {
           "type": "string",

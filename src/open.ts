@@ -6,7 +6,7 @@ export function activateOpen(context: vscode.ExtensionContext) {
   // Open in Inkscape Context Command
   context.subscriptions.push(
     vscode.commands.registerCommand("therion.context.openInInkscape", file => {
-      exec(`${getConfig("inkscapePath")} ${file.path}`);
+      exec(`${getConfig("inkscapePath")} "${file.fsPath}"`);
     })
   );
   if (getConfig("showOpen")) {
@@ -14,9 +14,11 @@ export function activateOpen(context: vscode.ExtensionContext) {
     context.subscriptions.push(
       vscode.commands.registerCommand("therion.context.open", file => {
         if (platform === "linux") {
-          exec(`${"xdg-open"} ${file.path}`);
+          exec(`${"xdg-open"} "${file.fsPath}"`);
         } else if (platform === "darwin") {
-          exec(`${"open"} ${file.path}`);
+          exec(`${"open"} "${file.fsPath}"`);
+        } else if (platform === "win32") {
+          exec(`"${file.fsPath}"`);
         }
       })
     );

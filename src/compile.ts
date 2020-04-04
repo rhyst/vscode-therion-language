@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as vscode from "vscode";
 import * as chokidar from "chokidar";
+import { platform } from "process";
 
 import { compile, outputChannel, getInputs } from "./util";
 
@@ -13,8 +14,12 @@ export function activateCompile(context: vscode.ExtensionContext) {
       compile(thFilePath);
     })
   );
+  vscode.commands.registerCommand("therion.context.compile", (file) => {
+    compile(file.fsPath);
+  });
 
   // Watch thconfig
+  if (platform === "win32") return;
   const watchStatusBarItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Left,
     0
@@ -28,7 +33,7 @@ export function activateCompile(context: vscode.ExtensionContext) {
   const startWatch = async (file, name) => {
     const files = await getInputs(file);
     const watcher = chokidar.watch(files);
-    watcher.on("change", path => {
+    watcher.on("change", (path) => {
       outputChannel.appendLine(`Changed: ${path}`);
       watcher.close();
       startWatch(file, name);
@@ -38,7 +43,7 @@ export function activateCompile(context: vscode.ExtensionContext) {
     compile(file);
   };
 
-  const stopWatch = key => {
+  const stopWatch = (key) => {
     const { name, watcher } = watches.get(key);
     watcher.close();
     watches.delete(key);
@@ -74,12 +79,13 @@ export function activateCompile(context: vscode.ExtensionContext) {
       }
       vscode.window.showInformationMessage(`Started watching ${name}.`);
       outputChannel.appendLine(`Started watching ${name}.`);
+      outputChannel.show(true);
       startWatch(file, name);
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("therion.command.stop-watch", e => {
+    vscode.commands.registerCommand("therion.command.stop-watch", (e) => {
       const watchesArr = Array.from(watches.values());
       if (watchesArr.length === 1) {
         stopWatch(watchesArr[0].file);
@@ -87,13 +93,13 @@ export function activateCompile(context: vscode.ExtensionContext) {
       }
       const quickPick = vscode.window.createQuickPick();
       let selection = null;
-      quickPick.items = watchesArr.map(watch => ({
+      quickPick.items = watchesArr.map((watch) => ({
         label: `Stop watching ${watch.name}`,
         name: watch.name,
-        file: watch.file
+        file: watch.file,
       }));
       quickPick.title = "Choose a file to stop watching";
-      quickPick.onDidChangeSelection(s => (selection = s));
+      quickPick.onDidChangeSelection((s) => (selection = s));
       quickPick.onDidAccept(() => {
         quickPick.hide();
         stopWatch(selection[0].file);

@@ -25,9 +25,9 @@ export const getCompletions = async (files, prevCharacter = null) => {
     );
   }
   if (prevCharacter === "@") {
-    return completions.filter(c => c.type === "survey");
+    return completions.filter((c) => c.type === "survey");
   }
-  return completions.filter(c => c.type !== "survey");
+  return completions.filter((c) => c.type !== "survey");
 };
 
 /**
@@ -50,7 +50,7 @@ export const _getCompletions = async (
   while ((line = liner.next())) {
     // Find more inputs
     const relativeNamespace = getRelativeNamespace(initialNamespace, [
-      ...namespace
+      ...namespace,
     ]);
     const text = line.toString("utf-8");
     const inputMatch = text.match(inputReg);
@@ -62,7 +62,7 @@ export const _getCompletions = async (
         fullPathWithExt,
         [...initialNamespace],
         seen,
-        [...namespace]
+        [...namespace],
       ]);
       continue;
     }
@@ -77,7 +77,7 @@ export const _getCompletions = async (
       completions.push({
         name,
         type,
-        namespace: relativeNamespace
+        namespace: relativeNamespace,
       });
       continue;
     }
@@ -96,7 +96,7 @@ export const _getCompletions = async (
       completions.push({
         name: surveyName,
         type: "survey",
-        namespace: getRelativeNamespace(initialNamespace, [...namespace])
+        namespace: getRelativeNamespace(initialNamespace, [...namespace]),
       });
       continue;
     }
@@ -159,14 +159,14 @@ export const getRelativeNamespace = (a: string[], b: string[]) => {
  * Generate azzzzzzzzzz
  * @param files A list of files to search.
  */
-export const getIncludes = files => {
+export const getIncludes = (files) => {
   let includes: Map<
     string,
     { file: string; namespace: string[] }[]
   > = new Map();
   for (const file of files) {
     const namespace = [];
-    const liner = new LineByLine(file.path);
+    const liner = new LineByLine(file.fsPath);
     let line: Buffer | false = null;
     let lineNo = 0;
     while ((line = liner.next())) {
@@ -174,16 +174,16 @@ export const getIncludes = files => {
       const text = line.toString("utf-8");
       const inputMatch = text.match(inputReg);
       if (inputMatch) {
-        const namespace = getCurrentNamespace(file.path, lineNo);
+        const namespace = getCurrentNamespace(file.fsPath, lineNo);
         const [, relativePath] = inputMatch;
         const fullPath = join(
-          dirname(file.path),
+          dirname(file.fsPath),
           relativePath.replace(/\"/g, "")
         );
         const fullPathWithExt = extname(fullPath) ? fullPath : `${fullPath}.th`;
         includes.set(fullPathWithExt, [
           ...(includes.get(fullPathWithExt) || []),
-          { file: file.path, namespace }
+          { file: file.fsPath, namespace },
         ]);
       }
       // Set current survey path
