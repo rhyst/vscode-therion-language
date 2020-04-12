@@ -8,8 +8,6 @@ import {
   TransportKind,
 } from "vscode-languageclient";
 
-import { getConfig } from "./util";
-
 let client: LanguageClient;
 
 export const activateLanguageServer = async (

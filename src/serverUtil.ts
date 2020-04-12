@@ -1,9 +1,5 @@
-import * as fs from "fs";
 import { join, dirname, extname } from "path";
-import * as util from "util";
 import LineByLine from "n-readlines";
-
-export const readFile = util.promisify(fs.readFile);
 
 const inputReg = /(?:\n|^)\s*(?:input|source)\s+(\S+)/;
 const nameReg = /(?:\n|^)\s*(map|scrap)\s+(\S+)/;
@@ -24,6 +20,7 @@ export const getCompletions = async (files, prevCharacter = null) => {
       await _getCompletions(file.file, file.namespace, seen)
     );
   }
+
   if (prevCharacter === "@") {
     return completions.filter((c) => c.type === "survey");
   }
@@ -131,7 +128,10 @@ export const getCurrentNamespace = (file, lineNo) => {
       survey.push(surveyName);
       continue;
     }
-    if (i === lineNo) return survey;
+    if (i === lineNo) {
+      liner.close();
+      return survey;
+    }
     const endSurveyMatch = text.match(endSurveyReg);
     if (endSurveyMatch) {
       survey.pop();
@@ -156,10 +156,10 @@ export const getRelativeNamespace = (a: string[], b: string[]) => {
 };
 
 /**
- * Generate azzzzzzzzzz
+ * Generate map of filenames to files where they are included
  * @param files A list of files to search.
  */
-export const getIncludes = (files) => {
+export const getIncludes = async (files) => {
   let includes: Map<
     string,
     { file: string; namespace: string[] }[]

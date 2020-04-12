@@ -5,14 +5,14 @@ import {
   InitializeParams,
   CompletionItem,
   CompletionItemKind,
-  TextDocumentPositionParams
+  TextDocumentPositionParams,
 } from "vscode-languageserver";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import {
   getCompletions,
   getCurrentNamespace,
   getRelativeNamespace,
-  getIncludes
+  getIncludes,
 } from "./serverUtil";
 
 let connection = createConnection(ProposedFeatures.all);
@@ -24,16 +24,16 @@ connection.onInitialize((params: InitializeParams) => {
     capabilities: {
       completionProvider: {
         resolveProvider: true,
-        triggerCharacters: ["@"]
-      }
-    }
+        triggerCharacters: ["@"],
+      },
+    },
   };
 });
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion(
   async ({
-    position
+    position,
   }: TextDocumentPositionParams): Promise<CompletionItem[]> => {
     const fileName = await connection.sendRequest(
       "getActiveTextEditorFileName"
@@ -50,7 +50,7 @@ connection.onCompletion(
 
     const currentNamespace = await getCurrentNamespace(fileName, position.line);
 
-    return completions.map(c => {
+    return completions.map((c) => {
       const namespace = getRelativeNamespace(currentNamespace, c.namespace)
         .reverse()
         .join(".");
@@ -66,7 +66,7 @@ connection.onCompletion(
       return {
         label,
         kind: CompletionItemKind.Variable,
-        data: { ...c, namespace }
+        data: { ...c, namespace },
       };
     });
   }
@@ -99,14 +99,14 @@ connection.onInitialized(async () => {
   const files: { path: string }[] = await connection.sendRequest(
     "getTherionFiles"
   );
-  includes = getIncludes(files);
+  includes = await getIncludes(files);
 });
 
 connection.onDidChangeWatchedFiles(async () => {
   const files: { path: string }[] = await connection.sendRequest(
     "getTherionFiles"
   );
-  includes = getIncludes(files);
+  includes = await getIncludes(files);
 });
 
 documents.listen(connection);
