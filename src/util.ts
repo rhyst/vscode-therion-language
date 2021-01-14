@@ -53,7 +53,7 @@ export const compile = async (filepath) => {
   }
 };
 
-const inputReg = /\n\s*(?:input|source)\s+(\S+)/g;
+const inputReg = /\n\s*(?:input|source)[^\S\r\n]+(\S+)/g;
 
 export const getInputs = async (file) => {
   const text = await readFile(file, "utf8");
