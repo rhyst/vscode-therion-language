@@ -13,12 +13,13 @@ repository:
       - include: "#blocks"
       - include: "#source-block"
       - include: "#source-builtin"
+      - include: "#extend-builtin"
       - include: "#layouts"
 
   builtins:
     patterns:
       - name: support.function.builtin.th
-        match: "(?:\\s|^)(text|language|export|select|equate|join|encoding|input|team|explo-team|date|units|data|point)(?:\\s|$)"
+        match: "(?:\\s|^)(text|language|export|select|equate|join|encoding|input|team|explo-team|explo-date|date|units|data|point|extend|station|fix)(?:\\s|$)"
 
   named-blocks:
     begin: "(?:\\s|^)(survey|scrap|map|lookup)\\s+(\\S+)(?:\\s|$)"
@@ -27,7 +28,7 @@ repository:
       "1":
         name: "keyword.control.th"
       "2":
-        name: entity.name.function.th
+        name: entity.name.section.th
     endCaptures:
       "0":
         name: "keyword.control.th"
@@ -101,7 +102,7 @@ repository:
       "1":
         name: "keyword.control.th"
       "2":
-        name: entity.name.function.th
+        name: entity.name.section.th
     endCaptures:
       "0":
         name: "keyword.control.th"
@@ -114,7 +115,7 @@ repository:
       "1":
         name: "keyword.control.th"
       "2":
-        name: entity.name.function.th
+        name: entity.name.section.th
     endCaptures:
       "0":
         name: "keyword.control.th"
@@ -129,7 +130,7 @@ repository:
       "1":
         name: "keyword.control.th"
       "2":
-        name: entity.name.function.th
+        name: entity.name.section.th
     endCaptures:
       "0":
         name: "keyword.control.th"
