@@ -87,3 +87,23 @@ survey my_system
 
 endsurvey
 ```
+
+# Configuration
+
+There are a number of configuration options. The important ones are:
+
+**Therion: Inkscape Path**
+
+This should be the path to the inkscape exectuable/binary.
+
+On Windows you should edit this. The path will probably be something like `"C:\Program Files\Inkscape\bin\inkscape.exe"`. The quotes are important.
+
+On Linux you can likely leave this as `inkscape` as it normally is available on your path. If not it's often at `/usr/bin/inkscape`.
+
+**Therion: Therion Path**
+
+This should be the path to the therion exectuable/binary.
+
+On Windows you should edit this. The path will probably be something like `"C:\Program Files (x86)\Therion\therion.exe"`. The quotes are important.
+
+On Linux you can likely leave this as `therion` as it normally is available on your path. If not it's often at `/usr/bin/therion`.
