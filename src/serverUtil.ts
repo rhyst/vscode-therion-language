@@ -129,7 +129,10 @@ export const getCurrentNamespace = (file, lineNo) => {
       continue;
     }
     if (i === lineNo) {
-      liner.close();
+      // @ts-ignore
+      if (!liner.eofReached) {
+        liner.close();
+      }
       return survey;
     }
     const endSurveyMatch = text.match(endSurveyReg);
