@@ -32,6 +32,9 @@
           "include": "#source-builtin"
         },
         {
+          "include": "#extend-builtin"
+        },
+        {
           "include": "#layouts"
         }
       ]
@@ -40,7 +43,7 @@
       "patterns": [
         {
           "name": "support.function.builtin.th",
-          "match": "(?:\\s|^)(text|language|export|select|equate|join|encoding|input|team|explo-team|date|units|data|point)(?:\\s|$)"
+          "match": "(?:\\s|^)(text|language|export|select|equate|join|encoding|input|team|explo-team|explo-date|date|units|data|point|extend|station|fix)(?:\\s|$)"
         }
       ]
     },
@@ -52,7 +55,7 @@
           "name": "keyword.control.th"
         },
         "2": {
-          "name": "entity.name.function.th"
+          "name": "entity.name.section.th"
         }
       },
       "endCaptures": {
@@ -165,7 +168,7 @@
           "name": "keyword.control.th"
         },
         "2": {
-          "name": "entity.name.function.th"
+          "name": "entity.name.section.th"
         }
       },
       "endCaptures": {
@@ -183,7 +186,7 @@
           "name": "keyword.control.th"
         },
         "2": {
-          "name": "entity.name.function.th"
+          "name": "entity.name.section.th"
         }
       },
       "endCaptures": {
@@ -206,7 +209,7 @@
           "name": "keyword.control.th"
         },
         "2": {
-          "name": "entity.name.function.th"
+          "name": "entity.name.section.th"
         }
       },
       "endCaptures": {
