@@ -6,7 +6,11 @@
     "lib": ["es2020", "es6", "dom"],
     "sourceMap": true,
     "rootDir": ".",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types/"
+    ]
   },
   "exclude": ["node_modules"]
 }
