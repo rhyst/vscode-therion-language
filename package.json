@@ -116,7 +116,7 @@
         },
         {
           "command": "therion.command.watch",
-          "when": "isLinux || isMac && editorLangId == therion-config-lang"
+          "when": "editorLangId == therion-config-lang"
         },
         {
           "command": "therion.command.createScrapPlanTemplate",

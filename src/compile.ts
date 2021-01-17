@@ -19,7 +19,6 @@ export function activateCompile(context: vscode.ExtensionContext) {
   });
 
   // Watch thconfig
-  if (platform === "win32") return;
   const watchStatusBarItem = vscode.window.createStatusBarItem(
     vscode.StatusBarAlignment.Left,
     0

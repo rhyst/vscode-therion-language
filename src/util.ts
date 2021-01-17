@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as process from "process";
 import * as path from "path";
 import * as util from "util";
 import * as cp from "child_process";
@@ -20,36 +21,32 @@ export const getConfig = (key) => {
 };
 
 export const compile = async (filepath) => {
-  if (platform !== "win32") {
+  if (platform === "win32") {
+    process.chdir(path.dirname(filepath));
+  }
+  outputChannel.show(true);
+  const name = path.basename(filepath);
+  outputChannel.appendLine(`Compiling: ${name}`);
+  try {
+    await exec(`${getConfig("therionPath")} "${filepath}"`, {
+      timeout: getConfig("commandTimeout"),
+    });
+    outputChannel.appendLine(`Compiled: ${name}`);
+    vscode.window.showInformationMessage(`Compiled: ${name}`);
+  } catch (e) {
+    vscode.window.showErrorMessage(`Failed to compile: ${name}`);
+    outputChannel.appendLine(`Failed to compile: ${name}`);
+    outputChannel.appendLine(`stderr:`);
+    e.stderr
+      .toString()
+      .split("\n")
+      .map((line) => outputChannel.appendLine(`\t${line.trim()}`));
+    outputChannel.appendLine(`stdout:`);
+    e.stdout
+      .toString()
+      .split("\n")
+      .map((line) => outputChannel.appendLine(`\t${line.trim()}`));
     outputChannel.show(true);
-    const name = path.basename(filepath);
-    outputChannel.appendLine(`Compiling: ${name}`);
-    try {
-      await exec(`${getConfig("therionPath")} "${filepath}"`, {
-        timeout: getConfig("commandTimeout"),
-      });
-      outputChannel.appendLine(`Compiled: ${name}`);
-      vscode.window.showInformationMessage(`Compiled: ${name}`);
-    } catch (e) {
-      vscode.window.showErrorMessage(`Failed to compile: ${name}`);
-      outputChannel.appendLine(`Failed to compile: ${name}`);
-      outputChannel.appendLine(`stderr:`);
-      e.stderr
-        .toString()
-        .split("\n")
-        .map((line) => outputChannel.appendLine(`\t${line.trim()}`));
-      outputChannel.appendLine(`stdout:`);
-      e.stdout
-        .toString()
-        .split("\n")
-        .map((line) => outputChannel.appendLine(`\t${line.trim()}`));
-      outputChannel.show(true);
-    }
-  } else {
-    const therionPath = getConfig("therionPath").replace(/(^"|"$)/, "");
-    const therionTclPath = path.join(path.dirname(therionPath), "xtherion.tcl");
-    const wishPath = path.join(path.dirname(therionPath), "bin", "wish86t.exe");
-    exec(`"${wishPath}" "${therionTclPath}" -- "${filepath}"`);
   }
 };
 
