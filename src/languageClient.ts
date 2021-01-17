@@ -62,21 +62,22 @@ export const activateLanguageServer = async (
   await client.onReady();
 
   // Client/server communication
-  client.onRequest("getActiveTextEditorFileName", () => {
-    return vscode.window.activeTextEditor.document.fileName;
-  });
-
-  client.onRequest("getActiveTextEditorContents", () => {
-    return vscode.window.activeTextEditor.document.getText();
-  });
-
-  client.onRequest("getActiveTextEditorLastCharacter", () => {
+  client.onRequest("getActiveTextEditorDetails", () => {
     const cursor = vscode.window.activeTextEditor.selection.active;
-    const start = new vscode.Position(cursor.line, cursor.character - 1);
-    const end = cursor;
-    return vscode.window.activeTextEditor.document.getText(
-      new vscode.Range(start, end)
+    const word = vscode.window.activeTextEditor.document.getWordRangeAtPosition(
+      cursor
     );
+    const start = word ? word.start : cursor;
+    let prefix = "";
+    if (start.character !== 0) {
+      const range = new vscode.Range(start.translate(0, -1), start);
+      prefix = vscode.window.activeTextEditor.document.getText(range);
+    }
+    return {
+      name: vscode.window.activeTextEditor.document.fileName,
+      contents: vscode.window.activeTextEditor.document.getText(),
+      prefix,
+    };
   });
 
   client.onRequest("getTherionFiles", async () => {

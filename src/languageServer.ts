@@ -6,6 +6,7 @@ import {
   CompletionItem,
   CompletionItemKind,
   TextDocumentPositionParams,
+  CompletionParams,
 } from "vscode-languageserver";
 import { TextDocument } from "vscode-languageserver-textdocument";
 import {
@@ -13,11 +14,14 @@ import {
   getCurrentNamespace,
   getRelativeNamespace,
   getIncludes,
+  SourceFile,
+  Namespace,
+  Includes,
 } from "./serverUtil";
 
 let connection = createConnection(ProposedFeatures.all);
 let documents = new TextDocuments(TextDocument);
-let includes = new Map();
+let includes: Includes = new Map();
 
 connection.onInitialize((params: InitializeParams) => {
   return {
@@ -32,26 +36,26 @@ connection.onInitialize((params: InitializeParams) => {
 
 // This handler provides the initial list of the completion items.
 connection.onCompletion(
-  async ({
-    position,
-  }: TextDocumentPositionParams): Promise<CompletionItem[]> => {
-    const fileName = await connection.sendRequest(
-      "getActiveTextEditorFileName"
-    );
-    const fileContents = await connection.sendRequest(
-      "getActiveTextEditorContents"
-    );
-    const lastCharacter = await connection.sendRequest(
-      "getActiveTextEditorLastCharacter"
-    );
-    // Get completions from files included in this file
-    // Get completions from files that include this file
-    let completions = await getCompletions(
-      [{ file: fileName, namespace: [] }, ...(includes.get(fileName) || [])],
-      lastCharacter
+  async (params: CompletionParams): Promise<CompletionItem[]> => {
+    const position = params.position;
+    const { name, contents, prefix } = await connection.sendRequest(
+      "getActiveTextEditorDetails"
     );
 
-    const currentNamespace = await getCurrentNamespace(fileContents, position.line, { isFileContents: true });
+    // Get completions from files included in this file
+    const currentFile = new SourceFile(name, [], contents);
+    // Get completions from files that include this file
+    const includeFiles = includes.get(name) || [];
+
+    let completions = await getCompletions(
+      [currentFile, ...includeFiles],
+      prefix
+    );
+
+    const currentNamespace: Namespace = await getCurrentNamespace(
+      currentFile,
+      position.line
+    );
 
     return completions.map((c) => {
       const namespace = getRelativeNamespace(currentNamespace, c.namespace)
@@ -70,7 +74,7 @@ connection.onCompletion(
         label,
         kind: CompletionItemKind.Variable,
         data: { ...c, namespace },
-        sortText: `${namespace.length}`
+        sortText: `${namespace.length}`,
       };
     });
   }
@@ -100,17 +104,19 @@ connection.onCompletionResolve(
 
 // Maintain a map of where filenames are used as an input or source
 connection.onInitialized(async () => {
-  const files: { path: string }[] = await connection.sendRequest(
+  const files: { fsPath: string }[] = await connection.sendRequest(
     "getTherionFiles"
   );
-  includes = await getIncludes(files);
+  const sourceFiles = files.map((file) => new SourceFile(file.fsPath));
+  includes = await getIncludes(sourceFiles);
 });
 
 connection.onDidChangeWatchedFiles(async () => {
-  const files: { path: string }[] = await connection.sendRequest(
+  const files: { fsPath: string }[] = await connection.sendRequest(
     "getTherionFiles"
   );
-  includes = await getIncludes(files);
+  const sourceFiles = files.map((file) => new SourceFile(file.fsPath));
+  includes = await getIncludes(sourceFiles);
 });
 
 documents.listen(connection);
