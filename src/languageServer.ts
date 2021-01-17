@@ -38,6 +38,9 @@ connection.onCompletion(
     const fileName = await connection.sendRequest(
       "getActiveTextEditorFileName"
     );
+    const fileContents = await connection.sendRequest(
+      "getActiveTextEditorContents"
+    );
     const lastCharacter = await connection.sendRequest(
       "getActiveTextEditorLastCharacter"
     );
@@ -48,7 +51,7 @@ connection.onCompletion(
       lastCharacter
     );
 
-    const currentNamespace = await getCurrentNamespace(fileName, position.line);
+    const currentNamespace = await getCurrentNamespace(fileContents, position.line, { isFileContents: true });
 
     return completions.map((c) => {
       const namespace = getRelativeNamespace(currentNamespace, c.namespace)
@@ -67,6 +70,7 @@ connection.onCompletion(
         label,
         kind: CompletionItemKind.Variable,
         data: { ...c, namespace },
+        sortText: `${namespace.length}`
       };
     });
   }
