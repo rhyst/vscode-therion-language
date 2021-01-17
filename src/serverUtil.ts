@@ -110,13 +110,41 @@ export const _getCompletions = async (
 };
 
 /**
+ * Class that imitates n-readlines for strings instead of files so we can use
+ * the same code for processing files and strings.
+ */
+class LineByLineString {
+  lines = [];
+  lineNo = 0;
+
+  constructor(string) {
+    this.lines = string.split('\n');
+    this.lineNo = 0;
+  }
+
+  get eofReached() {
+    return !this.lines.length || this.lineNo + 1 === this.lines.length;
+  }
+
+  next = () => {
+    this.lineNo = this.lineNo + 1
+    return this.lines[this.lineNo - 1]
+  }
+
+  close = () => {}
+}
+
+
+/**
  * Get the survey namespace at the cursor location. To generate correct
  * relative namespace paths from autocomplete suggestsions.
  * @param file The file the cursor is in.
  * @param lineNo The line number in the file.
+ * @param options Other options including `isFileContents` which indiciates 
+ * that `file` is the contents of the file not the filename.
  */
-export const getCurrentNamespace = (file, lineNo) => {
-  const liner = new LineByLine(file);
+export const getCurrentNamespace = (file, lineNo, options: { isFileContents?: Boolean } = {}) => {
+  const liner = options.isFileContents ?  new LineByLineString(file) : new LineByLine(file) ;
   let line: Buffer | false = null;
   const survey = [];
   let i = 0;

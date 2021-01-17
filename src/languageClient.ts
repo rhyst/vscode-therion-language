@@ -66,6 +66,10 @@ export const activateLanguageServer = async (
     return vscode.window.activeTextEditor.document.fileName;
   });
 
+  client.onRequest("getActiveTextEditorContents", () => {
+    return vscode.window.activeTextEditor.document.getText();
+  });
+
   client.onRequest("getActiveTextEditorLastCharacter", () => {
     const cursor = vscode.window.activeTextEditor.selection.active;
     const start = new vscode.Position(cursor.line, cursor.character - 1);
