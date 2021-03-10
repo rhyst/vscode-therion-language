@@ -184,12 +184,18 @@
           "type": "string",
           "default": "\t",
           "description": "The character(s) that should be used for autoformatting indendation."
+        },
+        "therion.wslName": {
+          "type": "string",
+          "default": null,
+          "description": "The name of the WSL environment that this workspace is running in (needed if opening WSL files in Windows)"
         }
       }
     }
   },
   "dependencies": {
     "chokidar": "^3.3.1",
+    "open": "^8.0.2",
     "tmp": "^0.1.0",
     "vscode-languageclient": "^6.1.0",
     "vscode-languageserver": "^6.1.1",

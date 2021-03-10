@@ -1,4 +1,5 @@
 {
     "coverage-gutters.customizable.status-bar-toggler-watchCoverageAndVisibleEditors-enabled": false,
-    "coverage-gutters.customizable.context-menu": false
+    "coverage-gutters.customizable.context-menu": false,
+    "prettier.printWidth": 120
 }
