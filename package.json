@@ -121,6 +121,18 @@
         {
           "command": "therion.command.createScrapPlanTemplate",
           "when": "editorLangId == therion-lang"
+        },
+        {
+          "command": "therion.context.open",
+          "when": "false"
+        },
+        {
+          "command": "therion.context.openInInkscape",
+          "when": "false"
+        },
+        {
+          "command": "therion.context.compile",
+          "when": "false"
         }
       ],
       "explorer/context": [
