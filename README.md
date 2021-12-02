@@ -104,4 +104,4 @@ On Linux you can likely leave this as `therion` as it normally is available on y
 
 ## WSL
 
-When running in this extension remotely in WSL it is assumed that therion will be installed in WSL and any GUI programs (Inkscape / PDF readers) will be installed in Windows.
+When running in this extension remotely in WSL it is assumed that therion will be installed in WSL and any GUI programs (Inkscape / PDF readers) will be installed in Windows. It is possible to override this behaviour for inkscape using the `Use WSL inkscape` option.

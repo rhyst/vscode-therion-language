@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/rhyst/vscode-therion-language"
   },
-  "version": "1.1.0",
+  "version": "1.1.1",
   "engines": {
     "vscode": "^1.42.0"
   },
@@ -163,7 +163,7 @@
         "therion.inkscapePath": {
           "type": "string",
           "default": "inkscape",
-          "description": "Full path to the Therion executable. Defaults to `inkscape` assuming its on your path."
+          "description": "Name of the inkscape application or full path to the inkscape executable. Defaults to `inkscape`."
         },
         "therion.commandTimeout": {
           "type": "number",
@@ -185,6 +185,12 @@
           "default": "\t",
           "description": "The character(s) that should be used for autoformatting indendation."
         },
+        "therion.wslInkscapeOnly": {
+          "title": "Use WSL inkscape",
+          "type": "boolean",
+          "default": false,
+          "description": "On WSL 'Open in Inkscape' will try to open the file in inkscape installed on windows. However if you have inkscape installed in WSL and have set up an X server in Windows then you can use the inkscape installed in WSL using this option."
+        },
         "therion.wslName": {
           "type": "string",
           "default": null,
@@ -195,7 +201,7 @@
   },
   "dependencies": {
     "chokidar": "^3.3.1",
-    "open": "^8.0.2",
+    "open": "^8.4.0",
     "tmp": "^0.1.0",
     "vscode-languageclient": "^6.1.0",
     "vscode-languageserver": "^6.1.1",
@@ -208,9 +214,9 @@
     "js-yaml": "^3.13.1",
     "ts-loader": "^6.2.1",
     "typescript": "^3.8.2",
-    "vscode": "^1.1.36",
+    "vscode": "^0.9.9",
     "webpack": "^4.41.6",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^4.9.1"
   },
   "scripts": {
     "yaml-to-json": "js-yaml syntaxes/therion-lang.tmLanguage.yaml > syntaxes/therion-lang.tmLanguage.json",
