@@ -214,6 +214,7 @@
     "js-yaml": "^3.13.1",
     "ts-loader": "^6.2.1",
     "typescript": "^3.8.2",
+    "vsce": "^2.5.1",
     "vscode": "^0.9.9",
     "webpack": "^4.41.6",
     "webpack-cli": "^4.9.1"
@@ -221,6 +222,7 @@
   "scripts": {
     "yaml-to-json": "js-yaml syntaxes/therion-lang.tmLanguage.yaml > syntaxes/therion-lang.tmLanguage.json",
     "vscode:prepublish": "npm run build",
+    "publish": "vsce publish",
     "build": "webpack --mode production && npm run yaml-to-json",
     "dev": "webpack --mode development && npm run yaml-to-json"
   }
