@@ -2,80 +2,42 @@
 name: Therion
 scopeName: source.therion
 patterns:
-  - include: "#expressions"
+  - include: "#all"
 repository:
-  expressions:
+  all:
     patterns:
       - include: "#comments"
       - include: "#strings"
-      - include: "#builtins"
-      - include: "#named-blocks"
-      - include: "#blocks"
-      - include: "#source-block"
-      - include: "#source-builtin"
-      - include: "#extend-builtin"
-      - include: "#layouts"
-
-  builtins:
-    patterns:
-      - name: support.function.builtin.th
-        match: "(?:\\s|^)(text|language|export|select|equate|join|encoding|input|team|explo-team|explo-date|date|units|data|point|extend|station|fix)(?:\\s|$)"
-
-  named-blocks:
-    begin: "(?:\\s|^)(survey|scrap|map|lookup)\\s+(\\S+)(?:\\s|$)"
-    end: "(?:\\s|^)(endsurvey|endscrap|endmap|endlookup)(?:\\s|$)"
-    beginCaptures:
-      "1":
-        name: "keyword.control.th"
-      "2":
-        name: entity.name.section.th
-    endCaptures:
-      "0":
-        name: "keyword.control.th"
-    name: expression.group
-    patterns:
-      - include: "#expressions"
-
-  blocks:
-    begin: "(?:\\s|^)(centreline|centerline|line|area)(\\s?\\S+)?(?:\\s|$)"
-    end: "(?:\\s|^)(endcentreline|endcenterline|endline|endarea)(?:\\s|$)"
-    beginCaptures:
-      "1":
-        name: "keyword.control.th"
-      "2":
-        name: "variable.parameter.th"
-    endCaptures:
-      "0":
-        name: "keyword.control.th"
-    name: expression.group
-    patterns:
-      - include: "#expressions"
-
-  # Source can be a block or a builtin
-  source-block:
-    begin: "(?:\\s|^)(source)(?:\\s)*$"
-    end: "(?:\\s|^)(endsource)(?:\\s|$)"
-    beginCaptures:
-      "1":
-        name: "keyword.control.th"
-    endCaptures:
-      "0":
-        name: "keyword.control.th"
-    name: expression.group
-    patterns:
-      - include: "#expressions"
-
-  source-builtin:
-    patterns:
-      - match: "(?:\\s|^)(source)(?:\\s+\\S+)"
-        captures:
-          "1":
-            name: support.function.builtin.th
+      - include: "#numbers"
+      - include: "#options"
+      - include: "#names"
+      - include: "#commands"
+      - include: "#survey"
+      - include: "#centreline"
+      - include: "#centreline-commands"
+      - include: "#group"
+      - include: "#scrap"
+      - include: "#scrap-commands"
+      - include: "#scrap-line"
+      - include: "#scrap-line-commands"
+      - include: "#scrap-area"
+      - include: "#scrap-area-commands"
+      - include: "#map"
+      - include: "#map-commands"
+      - include: "#surface"
+      - include: "#surface-commands"
+      - include: "#config-commands"
+      - include: "#source-command"
+      - include: "#source"
+      - include: "#layout"
+      - include: "#layout-commands"
+      - include: "#layout-code-tex"
+      - include: "#layout-code-metapost"
+      - include: "#lookup"
 
   comments:
-    patterns:
-      - name: "comment.line.number-sign.th"
-        match: "(#.*)$"
+    name: "comment.line.number-sign.th"
+    match: "(#.*)$"
 
   strings:
     name: string.quoted.double.th
@@ -85,19 +47,232 @@ repository:
       - name: constant.character.escape.th
         match: "\\\\."
 
-  layout-builtins:
-    patterns:
-      - name: support.function.builtin.th
-        match: "(?:\\s|^)(copy|scale|colour|symbol-hide|min-symbol-scale|map-comment|symbol-show|fonts-setup|map-header|colour-legend|legend|symbol-assign|initsymbol|statistics|symbol-colour|symbol-color )(?:\\s|$)"
+  numbers:
+    # Why doesn't this match negative numbers
+    match: "(?<=(?:[\\s\\[\\(\\)]|^))(-?\\d+(?:\\.\\d+)?)(?=(?:[\\s\\]\\)]|$))"
+    captures:
+      "1":
+        name: constant.numeric
 
-  layout-code:
-    patterns:
-      - name: "keyword.control.th"
-        match: "(?:\\s|^)(code|endcode)(?:\\s|$)"
+  options:
+    match: "(?:^|\\s)(-[a-zA-Z]+)"
+    captures:
+      "1":
+        name: support.function.builtin.th
 
-  layout-groups:
-    begin: "(?:\\s|^)(begingroup)(?:\\s|$)"
-    end: "(?:\\s|^)(endgroup;?)(?:\\s|$)"
+  names:
+    match: "(?<=(?:^|\\s))(\\S*)(@)(\\S*)(?=(?:\\s|$))"
+    captures:
+      "1":
+        name: variable.other.th
+      "2":
+        name: variable.language.th
+      "3":
+        name: variable.other.th
+
+  # Commands that can be used in any context
+  commands:
+    match: "^\\s*(encoding|input|join|equate|import|grade|revise)(?:\\s|$)"
+    captures:
+      "1":
+        name: support.function.builtin.th
+
+  survey:
+    contentName: meta.survey.th
+    begin: "^\\s*survey(?:\\s|$)"
+    beginCaptures:
+      "0":
+        name: keyword.control.th
+    end: "^\\s*endsurvey\\s*$"
+    endCaptures:
+      "0":
+        name: keyword.control.th
+    patterns:
+      - include: "#all"
+
+  centreline:
+    contentName: meta.survey.centreline.th
+    begin: "^\\s*cent(re|er)line(?:\\s|$)"
+    beginCaptures:
+      "0":
+        name: keyword.control.th
+    end: "^\\s*endcent(re|er)line\\s*$"
+    endCaptures:
+      "0":
+        name: keyword.control.th
+    patterns:
+      - include: "#all"
+
+  # Commands listed as command-like options for centreline or that can only be used in the centreline context
+  centreline-commands:
+    match: "^\\s*(date|explo-date|team|explo-team|instrument|infer|declination|grid-angle|sd|grade|units|calibrate|break|mark|flags|station|cs|fix|equate|data|walls|vthreshold|extend|station-names)(?:\\s|$)"
+    captures:
+      "1":
+        name: support.function.builtin.th
+
+  group:
+    contentName: meta.survey.group.th
+    begin: "^\\s*group(?:\\s|$)"
+    beginCaptures:
+      "0":
+        name: keyword.control.th
+    end: "^\\s*endgroup\\s*$"
+    endCaptures:
+      "0":
+        name: keyword.control.th
+    patterns:
+      - include: "#all"
+
+  scrap:
+    contentName: meta.survey.scrap.th
+    begin: "^\\s*scrap(?:\\s|$)"
+    beginCaptures:
+      "0":
+        name: keyword.control.th
+    end: "^\\s*endscrap\\s*$"
+    endCaptures:
+      "0":
+        name: keyword.control.th
+    patterns:
+      - include: "#all"
+
+  # Commands listed as command-like options for scrap or that can only be used in the scrap context
+  scrap-commands:
+    match: "^\\s*(point)(?:\\s|$)"
+    captures:
+      "1":
+        name: support.function.builtin.th
+
+  scrap-line:
+    contentName: meta.survey.scrap.line.th
+    begin: "^\\s*line(?:\\s|$)"
+    beginCaptures:
+      "0":
+        name: keyword.control.th
+    end: "^\\s*endline\\s*$"
+    endCaptures:
+      "0":
+        name: keyword.control.th
+    patterns:
+      - include: "#all"
+
+  # Commands listed as command-like options for line or that can only be used in the line context
+  scrap-line-commands:
+    match: "^\\s*(subtype|close|mark|orientation|outline|reverse|size|r-size|l-size|smooth|adjust|place|clip|visibility|context|altitude|border|direction|gradient|head|text|height)(?:\\s|$)"
+    captures:
+      "1":
+        name: support.function.builtin.th
+
+  scrap-area:
+    contentName: meta.survey.scrap.area.th
+    begin: "^\\s*area(?:\\s|$)"
+    beginCaptures:
+      "0":
+        name: keyword.control.th
+    end: "^\\s*endarea\\s*$"
+    endCaptures:
+      "0":
+        name: keyword.control.th
+    patterns:
+      - include: "#all"
+
+  # Commands listed as command-like options for area or that can only be used in the area context
+  scrap-area-commands:
+    match: "^\\s*(place|clip|visibility|context)(?:\\s|$)"
+    captures:
+      "1":
+        name: support.function.builtin.th
+
+  map:
+    contentName: meta.map.th
+    begin: "^\\s*map(?:\\s|$)"
+    beginCaptures:
+      "0":
+        name: keyword.control.th
+    end: "^\\s*endmap\\s*$"
+    endCaptures:
+      "0":
+        name: keyword.control.th
+    patterns:
+      - include: "#all"
+
+  # Commands listed as command-like options for map or that can only be used in the map context
+  map-commands:
+    match: "^\\s*(preview|colo(?:u)?r|proj(?:ection)?|title|survey)(?:\\s|$)"
+    captures:
+      "1":
+        name: support.function.builtin.th
+
+  surface:
+    contentName: meta.surface.th
+    begin: "^\\s*surface(?:\\s|$)"
+    beginCaptures:
+      "0":
+        name: keyword.control.th
+    end: "^\\s*endsurface\\s*$"
+    endCaptures:
+      "0":
+        name: keyword.control.th
+    patterns:
+      - include: "#all"
+
+  # Commands listed as command-like options for surface or that can only be used in the surface context
+  surface-commands:
+    match: "^\\s*(cs|bitmap|grid-units|grid|grid-flip)(?:\\s|^)"
+    captures:
+      "1":
+        name: support.function.builtin.th
+
+  # Config (layout files)
+
+  config-commands:
+    match: "^\\s*(system|encoding|language|cs|sketch-warp|input|select|unselect|maps|maps-offset|log|text)(?:\\s|$)"
+    captures:
+      "1":
+        name: support.function.builtin.th
+
+  source-command:
+    match: "^\\s*(source)(?:\\s*\\S+)(?:\\s|$)"
+    captures:
+      "1":
+        name: support.function.builtin.th
+
+  source:
+    contentName: meta.source.th
+    begin: "^\\s*source\\s*$"
+    beginCaptures:
+      "0":
+        name: keyword.control.th
+    end: "^\\s*endsource\\s*$"
+    endCaptures:
+      "0":
+        name: keyword.control.th
+    patterns:
+      - include: "#all"
+
+  layout:
+    contentName: meta.layout.th
+    begin: "^\\s*layout(?:\\s|$)"
+    beginCaptures:
+      "0":
+        name: keyword.control.th
+    end: "^\\s*endlayout\\s*$"
+    endCaptures:
+      "0":
+        name: keyword.control.th
+    patterns:
+      - include: "#all"
+
+  layout-commands:
+    match: "^\\s*(copy|cs|north|49|scale|base-scale|units|rotate|symbol-set|symbol-assign|symbol-hide|symbol-show|symbol-colour|min-symbol-scale|fonts-setup|size|overlap|page-setup|page-numbers|exclude-pages|title-pages|nav-factor|nav-size|transparency|opacity|surface|surface-opacity|sketches|layers|grid|grid-origin|grid-size|grid-coords|origin|origin-label|own-pages|page-grid|legend|legend-columns|legend-width|colour-legend|map-comment|map-header|map-header-bg|map-image|statistics|scale-bar|survey-level|language|colou?r-model|colou?r|smooth-shading|debug|doc-author|doc-keywords|doc-subject|doc-title|setup3d|sketch-colors|export)(?:\\s|$)"
+    captures:
+      "1":
+        name: support.function.builtin.th
+
+  layout-code-tex:
+    contentName: meta.embedded.block.latex
+    begin: "(?:\\s|^)(code) (tex\\S*)(?:\\s|$)"
+    end: "(?:\\s|^)(endcode;?)(?:\\s|$)"
     beginCaptures:
       "1":
         name: "keyword.control.th"
@@ -106,11 +281,13 @@ repository:
     endCaptures:
       "0":
         name: "keyword.control.th"
-    name: expression.group
+    patterns:
+      - include: "text.tex"
 
-  layout-def:
-    begin: "(?:\\s|^)(def)\\s+(\\S+)(?:\\s|$)"
-    end: "(?:\\s|^)(enddef;?)(?:\\s|$)"
+  layout-code-metapost:
+    contentName: meta.embedded.block.metapost
+    begin: "(?:\\s|^)(code) (metapost)(?:\\s|$)"
+    end: "(?:\\s|^)(endcode;?)(?:\\s|$)"
     beginCaptures:
       "1":
         name: "keyword.control.th"
@@ -119,25 +296,16 @@ repository:
     endCaptures:
       "0":
         name: "keyword.control.th"
-    name: expression.group
     patterns:
-      - include: "#layout-groups"
+      - include: source.mp
 
-  layouts:
-    begin: "(?:\\s|^)(layout)\\s+(\\S+)"
-    end: "(?:\\s|^)(endlayout)(?:\\s|$)"
+  lookup:
+    contentName: meta.lookup.th
+    begin: "^\\s*lookup(?:\\s|$)"
     beginCaptures:
-      "1":
-        name: "keyword.control.th"
-      "2":
-        name: entity.name.section.th
+      "0":
+        name: keyword.control.th
+    end: "^\\s*endlookup\\s*$"
     endCaptures:
       "0":
-        name: "keyword.control.th"
-    name: expression.group
-    patterns:
-      - include: "#comments"
-      - include: "#strings"
-      - include: "#layout-builtins"
-      - include: "#layout-def"
-      - include: "#layout-code"
+        name: keyword.control.th

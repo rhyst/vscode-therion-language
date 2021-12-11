@@ -1,0 +1,88 @@
+# Based on the metapost language extension found here: https://github.com/fjebaker/vscode-metapost
+"$schema": https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json
+name: MetaPost
+fileTypes:
+  - mp
+patterns:
+  - include: "#keywords"
+  - include: "#comments"
+  - include: "#strings"
+  - include: "#operators"
+  - include: "#numbers"
+  - include: "#variables"
+repository:
+  keywords:
+    patterns:
+      - name: keyword.control.flow.mp
+        match: "\\b(if|else|fi|for|save|within|step|upto|downto|until|endfor|end|beginfig|endfig|begingroup|endgroup|beginpattern|endpattern|def|vardef|enddef|and|of|or)\\b"
+      - name: keyword.control.transform.mp
+        match: "\\b(rotated|scaled|shifted|slanted|transformed|xscaled|yscaled|zscaled|reflectedabout|rotatedaround)\\b"
+      - name: keyword.control.qualifier.mp
+        match: "\\b(withcolor|dashed|evenly|withpen|pencircle)\\b"
+      - name: support.type.mp
+        match: "\\b(path|pair|numeric|picture|expr|string|boolean)\\b"
+      - name: keyword.control.builtin.mp
+        match: "\\b(draw|clip|to|drawarrow|fill)\\b"
+      - name: keyword.operator.mp
+        match: "\\b(subpath)\\b"
+      - name: meta.input.mp
+        match: "\\b(input)\\s*(\\w+)\\b"
+        captures:
+          "1":
+            name: keyword.other.input.mp
+          "2":
+            name: meta.input.name.mp
+  strings:
+    patterns:
+      - name: string.quoted.double.mp
+        begin: '"'
+        end: '"'
+        patterns:
+          - name: constant.character.escape.mp
+            match: "\\\\."
+      - name: meta.embedded.inline.latex
+        contentName: meta.embedded.inline.latex
+        begin: "\\bbtex\\b"
+        end: "\\betex\\b"
+        patterns:
+          - include: text.tex.latex
+      - name: meta.embedded.block.latex
+        contentName: meta.embedded.block.latex
+        begin: "\\bverbatimtex\\b"
+        end: "\\betex\\b"
+        patterns:
+          - include: text.tex.latex
+  numbers:
+    patterns:
+      - name: constant.numeric.mp
+        match: "\\b[0-9]+(\\.[0-9]+)?"
+      - name: constant.language.mp
+        match: "\\b(whatever|origin|up|right|down|left|cycle)\\b"
+  operators:
+    patterns:
+      - name: keyword.operator.arithmetic.mp
+        match: "(&|\\*\\*|\\*|\\+-\\+|-|\\+|\\+\\+|/)"
+      - name: keyword.operator.assign.mp
+        match: "(=|:=)"
+      - name: keyword.operator.drawing.mp
+        match: "(\\.\\.|\\.\\.\\.|--)"
+      - name: keyword.operator.comparison.mp
+        match: "(<|>|<=|>=|<>)"
+  comments:
+    name: comment.line
+    match: "(%|#).*$"
+  variables:
+    patterns:
+      - name: constant.character.reserved.mp
+        match: "\\b(beveled|bp|butt|cc|cm|dd|epsilon|in|infinity|miltered|mm|pc|pt|rounded|squared)\\b"
+      - name: support.function.unaryop.mp
+        match: "\\b(abs|angle|arclength|bbox|blackpart|bluepart|bot|bounded|ceiling|center|char|clipped|colormodel|cods|cyanpart|dashpart|decimal|dir|floor|filled|fontpart|fontsize|greenpart|greypart|hex|inverse|known|length|lft|llcorner|lrcorner|magentapart|makepath|makepen|mexp|mlog|not|oct|odd|pathpart|penpart|readfrom|redfpart|reverse|round|rt|sind|sqrt|stroked|textpart|textual|top|ulcorner|uniformdeviate|unitvector|unknown|urcorner|xpart|xxpart|xypart|yellowpart|ypart|yxpart|yypart)\\b"
+      - name: support.function.call.mp
+        match: "\\b[a-zA-Z]+(?=\\()"
+      - match: "\\b([_a-zA-Z]+[_a-zA-Z0-9\\.#]*)\\."
+        captures:
+          "1":
+            name: support.class.mp
+      - name: variable.mp
+        match: "[_a-zA-Z]+[_a-zA-Z0-9\\.#]*"
+scopeName: source.mp

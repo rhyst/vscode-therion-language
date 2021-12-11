@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.2.1] - 2021-12-11
+
+### Added
+
+- Added complete syntax highlighting for all commands mentioned in the Therion manual
+- MetaPost snippet highlighting based on work found here: https://github.com/fjebaker/vscode-metapost
+
+### Changed
+
+- Formatter updated to format `code` and `beginpattern` blocks.
+
+### Fixed
+
 ## [1.1.1] - 2021-12-02
 
 ### Added
