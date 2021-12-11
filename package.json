@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/rhyst/vscode-therion-language"
   },
-  "version": "1.1.1",
+  "version": "1.2.1",
   "engines": {
     "vscode": "^1.42.0"
   },
@@ -30,6 +30,14 @@
   "contributes": {
     "languages": [
       {
+        "id": "mp",
+        "aliases": [
+          "MetaPost",
+          "mp"
+        ],
+        "configuration": "./language-configurations/metapost.json"
+      },
+      {
         "id": "therion-lang",
         "aliases": [
           "Therion"
@@ -41,7 +49,7 @@
           ".thm",
           ".thmap"
         ],
-        "configuration": "./language-configuration.json"
+        "configuration": "./language-configurations/therion.json"
       },
       {
         "id": "therion-config-lang",
@@ -67,19 +75,36 @@
     ],
     "grammars": [
       {
+        "language": "mp",
+        "scopeName": "source.mp",
+        "path": "./syntaxes/metapost-lang.tmLanguage.json"
+      },
+      {
         "language": "therion-lang",
         "scopeName": "source.therion",
-        "path": "./syntaxes/therion-lang.tmLanguage.json"
+        "path": "./syntaxes/therion-lang.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.metapost": "MetaPost",
+          "meta.embedded.block.tex": "tex"
+        }
       },
       {
         "language": "therion-config-lang",
         "scopeName": "source.therion",
-        "path": "./syntaxes/therion-lang.tmLanguage.json"
+        "path": "./syntaxes/therion-lang.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.metapost": "MetaPost",
+          "meta.embedded.block.tex": "tex"
+        }
       },
       {
         "language": "therion-2d-lang",
         "scopeName": "source.therion",
-        "path": "./syntaxes/therion-lang.tmLanguage.json"
+        "path": "./syntaxes/therion-lang.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.block.metapost": "MetaPost",
+          "meta.embedded.block.tex": "tex"
+        }
       }
     ],
     "commands": [
@@ -220,7 +245,7 @@
     "webpack-cli": "^4.9.1"
   },
   "scripts": {
-    "yaml-to-json": "js-yaml syntaxes/therion-lang.tmLanguage.yaml > syntaxes/therion-lang.tmLanguage.json",
+    "yaml-to-json": "bash -c 'for file in syntaxes/*.yaml; do ./node_modules/.bin/js-yaml $file > ${file/yaml/json}; done'",
     "vscode:prepublish": "npm run build",
     "publish": "vsce publish",
     "build": "webpack --mode production && npm run yaml-to-json",
