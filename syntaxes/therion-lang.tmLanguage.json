@@ -71,8 +71,8 @@
       ]
     },
     "blocks": {
-      "begin": "(?:\\s|^)(centreline|centerline|line)(\\s?\\S+)?(?:\\s|$)",
-      "end": "(?:\\s|^)(endcentreline|endcenterline|endline)(?:\\s|$)",
+      "begin": "(?:\\s|^)(centreline|centerline|line|area)(\\s?\\S+)?(?:\\s|$)",
+      "end": "(?:\\s|^)(endcentreline|endcenterline|endline|endarea)(?:\\s|$)",
       "beginCaptures": {
         "1": {
           "name": "keyword.control.th"
