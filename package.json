@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/rhyst/vscode-therion-language"
   },
-  "version": "1.2.1",
+  "version": "1.2.2",
   "engines": {
     "vscode": "^1.42.0"
   },
@@ -60,7 +60,7 @@
           ".thcfg",
           ".thconfig"
         ],
-        "configuration": "./language-configuration.json"
+        "configuration": "./language-configurations/therion.json"
       },
       {
         "id": "therion-2d-lang",
@@ -70,7 +70,7 @@
         "extensions": [
           ".th2"
         ],
-        "configuration": "./language-configuration.json"
+        "configuration": "./language-configurations/therion.json"
       }
     ],
     "grammars": [
