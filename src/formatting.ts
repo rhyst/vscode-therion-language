@@ -2,9 +2,9 @@ import * as vscode from "vscode";
 import { getConfig } from "./util";
 
 const startTags =
-  /^(scrap|survey|map|centreline|centerline|line|layout|lookup|def|begingroup|code|source$|beginpattern.*|if)(\s|$)/;
+  /^(scrap|survey|map|centreline|centerline|line|layout|lookup|def|vardef|begingroup|code|revise\s+\S+$|source$|beginpattern.*|if)(\s|$)/;
 const endTags =
-  /(^|\s)(endscrap|endsurvey|endmap|endcentreline|endcenterline|endline|endlayout|endlookup|enddef(;)?|endgroup(;)?|endcode|endsource|endpattern(;)?|fi(;)?)(\s|$)/;
+  /(^|\s)(endscrap|endsurvey|endmap|endcentreline|endcenterline|endline|endlayout|endlookup|enddef(;)?|endgroup(;)?|endcode|endrevise|endsource|endpattern(;)?|fi(;)?)(\s|$)/;
 
 export function activateFormatter() {
   // Formatter

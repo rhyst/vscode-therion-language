@@ -13,6 +13,8 @@ repository:
       - include: "#names"
       - include: "#commands"
       - include: "#survey"
+      - include: "#revise"
+      - include: "#revise-command"
       - include: "#centreline"
       - include: "#centreline-commands"
       - include: "#group"
@@ -72,7 +74,7 @@ repository:
 
   # Commands that can be used in any context
   commands:
-    match: "^\\s*(encoding|input|join|equate|import|grade|revise)(?:\\s|$)"
+    match: "^\\s*(encoding|input|join|equate|import|grade)(?:\\s|$)"
     captures:
       "1":
         name: support.function.builtin.th
@@ -102,6 +104,25 @@ repository:
         name: keyword.control.th
     patterns:
       - include: "#all"
+
+  revise:
+    contentName: meta.survey.revise.th
+    begin: "^\\s*(revise)(?!\\s+\\S+\\s+\\S)"
+    beginCaptures:
+      "1":
+        name: keyword.control.th
+    end: "^\\s*endrevise\\s*$"
+    endCaptures:
+      "0":
+        name: keyword.control.th
+    patterns:
+      - include: "#all"
+
+  revise-command:
+    match: "^\\s*(revise)(?!\\s*\\S*\\s*$)"
+    captures:
+      "1":
+        name: support.function.builtin.th
 
   # Commands listed as command-like options for centreline or that can only be used in the centreline context
   centreline-commands:

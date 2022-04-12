@@ -32,6 +32,12 @@
           "include": "#survey"
         },
         {
+          "include": "#revise"
+        },
+        {
+          "include": "#revise-command"
+        },
+        {
           "include": "#centreline"
         },
         {
@@ -142,7 +148,7 @@
       }
     },
     "commands": {
-      "match": "^\\s*(encoding|input|join|equate|import|grade|revise)(?:\\s|$)",
+      "match": "^\\s*(encoding|input|join|equate|import|grade)(?:\\s|$)",
       "captures": {
         "1": {
           "name": "support.function.builtin.th"
@@ -188,6 +194,34 @@
           "include": "#all"
         }
       ]
+    },
+    "revise": {
+      "contentName": "meta.survey.revise.th",
+      "begin": "^\\s*(revise)(?!\\s+\\S+\\s+\\S)",
+      "beginCaptures": {
+        "1": {
+          "name": "keyword.control.th"
+        }
+      },
+      "end": "^\\s*endrevise\\s*$",
+      "endCaptures": {
+        "0": {
+          "name": "keyword.control.th"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#all"
+        }
+      ]
+    },
+    "revise-command": {
+      "match": "^\\s*(revise)(?!\\s*\\S*\\s*$)",
+      "captures": {
+        "1": {
+          "name": "support.function.builtin.th"
+        }
+      }
     },
     "centreline-commands": {
       "match": "^\\s*(date|explo-date|team|explo-team|instrument|infer|declination|grid-angle|sd|grade|units|calibrate|break|mark|flags|station|cs|fix|equate|data|walls|vthreshold|extend|station-names)(?:\\s|$)",
